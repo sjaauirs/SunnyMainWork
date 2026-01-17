@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-api-sa
+  namespace: helios-sbx
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::768763313030:role/helios-sbx-admin-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-api
+  namespace: helios-sbx
+  labels:
+    app: admin-api
+spec:
+  selector:
+    app: admin-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-api-deployment
+  namespace: helios-sbx
+  labels:
+    app: admin-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: admin-api
+  template:
+    metadata:
+      labels:
+        app: admin-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: admin-api-sa
+      containers:
+        - name: admin-api
+          image: 768763313030.dkr.ecr.us-east-2.amazonaws.com/helios-sbx-admin-api-ecr:IMAGETAG
+          ports:
+            - containerPort: 5001
+          resources:
+            requests:
+              memory: "0.5Gi"
+              cpu: "0.5"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Sbx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/subnets: subnet-0486f8cf1ff8e2e85,subnet-00c6cd5998dbc5687,subnet-01e0a0cbffe541f29
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: helios-sbx-admin-api-lb
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: admin-api
+  name: admin-api-ingress
+  namespace: helios-sbx
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: admin-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific

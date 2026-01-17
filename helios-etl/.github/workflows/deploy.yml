@@ -1,0 +1,575 @@
+name: Push Docker image to ECR
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment (dev01, dev, qa, uat, integ, prod, newdev, sbx)'
+        required: true
+        type: string
+
+jobs:
+  deploy-dev01:
+    if: ${{ inputs.environment == 'dev01' }}
+    name: Deploy to Dev01
+    runs-on: ubuntu-latest
+    env:
+      BatchJobRepoName: "helios-dev01-batch-job-repo-ecr"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet'
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Dev01/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.BatchJobRepoName }}:$GITHUB_RUN_ID \
+            --build-arg AK="${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}" \
+            --build-arg SK="${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}" \
+            .
+          docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }}:$GITHUB_RUN_ID
+
+  deploy-dev:
+    if: ${{ inputs.environment == 'dev' }}
+    name: Deploy to dev
+    runs-on: ubuntu-latest
+    env:
+      JobDefinitionName: "SunnyBatchJobDef"
+      JobQueueName: "SunnyJobQueue"
+      BatchJobRepoName: "sunny-batch-job-repo"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"  
+            
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Development/g" Dockerfile
+          # sed -i "s/COMMAND/--enableS3/g" Dockerfile
+          docker build -f Dockerfile -t $ECR_REGISTRY/${{ env.BatchJobRepoName }} --build-arg AK="${{secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }}
+  
+  deploy-qa:
+    if: ${{ inputs.environment == 'qa' }}
+    name: Deploy to qa
+    runs-on: ubuntu-latest
+    env:
+      JobDefinitionName: "helios-etl-qa"
+      JobQueueName: "helios-etl-qa-queue"
+      BatchJobRepoName: "helios-qa-batch-job-repo"
+      UATRepo: "helios-uat-batch-job-repo"
+      ProdRepo: "helios-batch-job-repo"
+      IntegRepo: "helios-integ-batch-job-repo"
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_QA }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: QA, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_QA_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_QA_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"  
+            
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Qa/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.BatchJobRepoName }} --build-arg AK="${{ secrets.HELIOS_QA_AWS_ACCESS_KEY_ID }}" --build-arg SK="${{ secrets.HELIOS_QA_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }} 
+          # docker tag  $ECR_REGISTRY/${{ env.BatchJobRepoName }} $ECR_REGISTRY/${{ env.BatchJobRepoName }}:$GITHUB_RUN_ID
+          # docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }}:$GITHUB_RUN_ID 
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_QA }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: QA, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+  
+  deploy-uat:
+    if: ${{ inputs.environment == 'uat' }}
+    name: Deploy to uat
+    runs-on: ubuntu-latest
+    env:
+      QARepo: "helios-qa-batch-job-repo"
+      UATRepo: "helios-uat-batch-job-repo"
+      ProdRepo: "helios-batch-job-repo"
+      IntegRepo: "helios-integ-batch-job-repo"
+
+    steps:
+
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_UAT }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: UAT, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"  
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Uat/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.UATRepo }} --build-arg AK="${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}" --build-arg SK="${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.UATRepo }}
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_UAT }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: UAT, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+  
+  deploy-integ:
+    if: ${{ inputs.environment == 'integ' }}
+    name: Deploy to integ
+    runs-on: ubuntu-latest
+    env:
+      QARepo: "helios-qa-batch-job-repo"
+      UATRepo: "helios-uat-batch-job-repo"
+      ProdRepo: "helios-batch-job-repo"
+      IntegRepo: "helios-integ-batch-job-repo"
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_INTEG }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Integ, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_INT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Integ/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.IntegRepo }} --build-arg AK="${{ secrets.HELIOS_INT_AWS_ACCESS_KEY_ID }}" --build-arg SK="${{ secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.IntegRepo }}
+      
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_INTEG }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Integ, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+  
+  deploy-prod:
+    if: ${{ inputs.environment == 'prod' }}
+    name: Deploy to prod
+    runs-on: ubuntu-latest
+    env:
+      QARepo: "helios-qa-batch-job-repo"
+      UATRepo: "helios-uat-batch-job-repo"
+      ProdRepo: "helios-batch-job-repo"
+      IntegRepo: "helios-integ-batch-job-repo"
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_PROD }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Prod, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest' 
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_PROD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_PROD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Production/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.ProdRepo }} --build-arg AK="${{ secrets.HELIOS_PROD_AWS_ACCESS_KEY_ID }}" --build-arg SK="${{ secrets.HELIOS_PROD_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.ProdRepo }} 
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_PROD }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Prod, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+  
+  deploy-newdev:
+    if: ${{ inputs.environment == 'newdev' }}
+    name: Deploy to newdev
+    runs-on: ubuntu-latest
+    env:
+      BatchJobRepoName: "helios-dev-helios-batch-job-api-ecr"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_NEW_DEV_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_NEW_DEV_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"  
+            
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Newdev/g" Dockerfile
+          docker build -f Dockerfile -t $ECR_REGISTRY/${{ env.BatchJobRepoName }} --build-arg AK="${{secrets.HELIOS_NEW_DEV_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_NEW_DEV_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }}
+
+  deploy-sbx:
+    if: ${{ inputs.environment == 'sbx' }}
+    name: Deploy to SBX
+    runs-on: ubuntu-latest
+    env:
+      BatchJobRepoName: "helios-sbx-batch-job-repo-ecr"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_SBX_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_SBX_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet'
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Sbx/g" Dockerfile
+          docker build -f Dockerfile -t $ECR_REGISTRY/${{ env.BatchJobRepoName }} --build-arg AK="${{secrets.HELIOS_SBX_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_SBX_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }}

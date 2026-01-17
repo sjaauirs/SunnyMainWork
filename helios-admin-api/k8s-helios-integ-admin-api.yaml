@@ -1,0 +1,124 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-api
+  namespace: helios-integ
+  labels:
+    app: admin-api
+spec:
+  selector:
+    app: admin-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-api-deployment
+  namespace: helios-integ
+  labels:
+    app: admin-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-api
+  template:
+    metadata:
+      labels:
+        app: admin-api
+    spec:
+      serviceAccountName: externalsecretsa
+      containers:
+      - name: admin-api
+        image: 590183943866.dkr.ecr.us-east-2.amazonaws.com/helios-integ-admin-api:IMAGETAG
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Integ
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/subnets: 	subnet-0c8b4375b4623549e,subnet-0aad429a4c7cc221c,subnet-018ceaf9218ac8575
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: helios-integ-admin-api-lb
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:590183943866:certificate/3348a3b1-792d-4025-ab18-547f4457b085
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: admin-api
+  name: admin-api-ingress
+  namespace: helios-integ
+spec:
+  tls:
+    - hosts:
+        - admin-api.integ.sunnyrewards.com
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: admin-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/subnets: subnet-0c8b4375b4623549e,subnet-0aad429a4c7cc221c,subnet-018ceaf9218ac8575
+    alb.ingress.kubernetes.io/security-groups: sg-0bb29e4f9f123c93b
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: helios-integ-admin-lb-public
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:590183943866:certificate/470862aa-cd17-4f66-b98f-4ad9455a6ed4
+    # Define the path and port for the health check
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: admin-api
+  name: admin-api-ingress-public
+  namespace: helios-integ
+spec:
+  tls:
+    - hosts:
+        - adminp-api.integ.sunnybenefits.com
+      # secretName: sunnybenefitsstarcert
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: admin-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific

@@ -1,0 +1,2 @@
+member_id	member_type	last_name	first_name	gender	age	dob	email	mobile_phone	emp_or_dep	mem_nbr	subscriber_mem_nbr	eligibility_start	eligibility_end	mailing_address_line1	mailing_address_line2	mailing_state	mailing_country_code	home_phone_number	city	country	postal_code
+800	SU	Newell	Alex	M	35	10/14/1988	anewell@sunnyrewards.com	603-738-0403	E	6037380403	6037380403	01/01/2024	12/31/2024	123	Main street	TX	840	1234567890	Houston	US	77001

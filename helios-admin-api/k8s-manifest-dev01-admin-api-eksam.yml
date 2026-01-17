@@ -1,0 +1,128 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-api-sa
+  namespace: helios-dev01
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::375611915274:role/helios-dev01-admin-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-api
+  namespace: helios-dev01
+  labels:
+    app: admin-api
+spec:
+  selector:
+    app: admin-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-api-deployment
+  namespace: helios-dev01
+  labels:
+    app: admin-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-api
+  template:
+    metadata:
+      labels:
+        app: admin-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: admin-api-sa
+      containers:
+        - name: admin-api
+          image: 375611915274.dkr.ecr.us-east-2.amazonaws.com/helios-dev01-admin-api-ecr:IMAGETAG
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "0.5Gi"
+              cpu: "0.5"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Dev01
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/subnets: subnet-00bf4bbe6f520dbfd,subnet-0294a50737e7457ab,subnet-0ddf802f870d5b973
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: helios-dev01-admin-api-lb
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+    - ingress.k8s.aws/resources
+  labels:
+    app: admin-api
+  name: dev01-admin-api-ingress
+  namespace: helios-dev01
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: admin-api
+                port:
+                  number: 80
+            path: /*
+            pathType: ImplementationSpecific
+---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   annotations:
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+#     alb.ingress.kubernetes.io/backend-protocol: HTTP
+#     alb.ingress.kubernetes.io/ssl-redirect: "443"
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     alb.ingress.kubernetes.io/subnets: subnet-05cfbeb2546eb928f,subnet-0c290aad7e630637e,subnet-0da0b50f6bb727e82
+#     alb.ingress.kubernetes.io/target-type: ip
+#     alb.ingress.kubernetes.io/load-balancer-name: helios-dev01-admin-lb-public
+#     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:375611915274:certificate/9c4f77fd-08fa-4aa9-90a9-791d7f059721
+#     alb.ingress.kubernetes.io/healthcheck-path: /health/live
+#     alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+#     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+#   finalizers:
+#     - ingress.k8s.aws/resources
+#   labels:
+#     app: admin-api
+#   name: admin-api-ingress-public
+#   namespace: helios-dev01
+# spec:
+#   tls:
+#     - hosts:
+#         - adminp-api.dev01.sunnybenefits.com
+#   ingressClassName: alb
+#   rules:
+#     - http:
+#         paths:
+#           - backend:
+#               service:
+#                 name: admin-api
+#                 port:
+#                   number: 80
+#             path: /*
+#             pathType: ImplementationSpecific

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.S3" Version="3.7.305.29" />
+		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.400.125" />
+		<PackageReference Include="AWSSDK.SQS" Version="3.7.300.53" />
+		<PackageReference Include="AWSSDK.Batch" Version="3.7.300.13" />
+		<PackageReference Include="CsvHelper" Version="31.0.0" />
+		<PackageReference Include="NHibernate" Version="5.5.2" />
+		<PackageReference Include="RulesEngine" Version="6.0.0" />
+		<PackageReference Include="SSH.NET" Version="2025.0.0" />
+		<PackageReference Include="SunnyRewards.Helios.Task.Core" Version="2025.9.25.1032">
+			<Aliases>SunnyRewards_Task</Aliases>
+		</PackageReference>
+			
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Core\SunnyRewards.Helios.ETL.Core.csproj">
+		</ProjectReference>
+	</ItemGroup>
+
+	
+</Project>

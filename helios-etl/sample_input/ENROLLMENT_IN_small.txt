@@ -1,0 +1,3 @@
+mem_nbr,enr_start,enr_end,ben_medical,ben_dent,ben_rx,ben_mh_inp,ben_mh_int,ben_mh_amb,ben_cd_inp,ben_cd_int,ben_cd_amb,ben_hospice,ben_dis,enr_subscriber_num,hp_employee,emp_nbr,med_elig_cat_id,product_id,product_id_2,coverage_indicator,pbp_nbr,snp_type,amp_nbr,cin_number
+063449988,2023-03-23,2023-12-31,Y,Y,Y,N,N,N,N,Y,Y,N,N,2PNWF40THEWUGKKAUTKQYG7I44G8LJIN2ZYG80URN018676DR,N,,5,3606,,PR,002,3,QIU3E7V,WAAQ7RI5X8IGA224AQC9MEZSMA773V
+220659988,2023-01-22,2023-12-31,Y,N,Y,Y,N,Y,N,Y,N,Y,N,FJMMHVHUXA2WH146YCE95CB88UQ0KXMJ74CJR7PCTX3AFZDHB,N,,4,6018,,SN,001,2,O5A3TJS,AEBRGW7FAS2OZJMCW6SFSLZKDRON8I

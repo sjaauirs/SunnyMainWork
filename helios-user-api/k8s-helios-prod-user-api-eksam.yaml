@@ -1,0 +1,130 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-api
+  namespace: helios-prod
+  labels:
+    app: user-api
+spec:
+  selector:
+    app: user-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: user-api-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: user-api
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api-deployment
+  namespace: helios-prod
+  labels:
+    app: user-api
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: heliossa
+      containers:
+      - name: user-api
+        image: 759215193824.dkr.ecr.us-east-2.amazonaws.com/user-api:IMAGETAG
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "4"
+          limits:
+            memory: "16Gi"
+            cpu: "8"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production  
+---        
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-api-prod-scaling-hpa
+  namespace: helios-prod   
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: user-api-deployment
+  minReplicas: 4
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
+---            
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scale-job-user-prod-service-account
+  namespace: helios-prod
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scale-job-user-prod-role
+  namespace: helios-prod
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]  
+- apiGroups: ["apps"]
+  resources: ["deployments/scale"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+- apiGroups: ["batch"]
+  resources: ["cronjobs"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scale-job-user-prod-role-binding
+  namespace: helios-prod
+subjects:
+- kind: ServiceAccount
+  name: scale-job-user-prod-service-account
+  namespace: helios-prod
+roleRef:
+  kind: Role
+  name: scale-job-user-prod-role
+
+  apiGroup: rbac.authorization.k8s.io

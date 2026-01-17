@@ -1,0 +1,83 @@
+name: Deploy to UAT EKS Fargate 
+
+on:
+  workflow_dispatch:
+  # merge_group:
+  # push:
+  #   branches:
+  #     - release/1.1.0
+
+env:
+  PROJECT_PATH: 'helios-user-api.sln'      
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # - name: Send Slack message
+      #   id: slack_start
+      #   uses: slackapi/slack-github-action@v1.24.0
+      #   with:
+      #     # For posting a rich message using Block Kit
+      #     payload: |
+      #       {
+      #         "text": "[Env: Uat, Repo: ${{ github.event.repository.name }}] GitHub Action starting build/deploy for: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "[Env: Uat, Repo: ${{ github.event.repository.name }}] GitHub Action starting build/deploy for: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_UAT }}
+      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Deploy to EKS Fargate
+        run: |
+          sed -i "s/IMAGETAG/${{ vars.UAT_USER_API_IMAGEID }}/g" k8s-helios-uat-user-api.yaml
+          aws eks update-kubeconfig --name helios-uat --region us-east-2
+          kubectl apply -f k8s-helios-uat-user-api.yaml
+
+      # - name: Send Slack message
+      #   id: slack_end
+      #   uses: slackapi/slack-github-action@v1.24.0
+      #   with:
+      #     # For posting a rich message using Block Kit
+      #     payload: |
+      #       {
+      #         "text": "[Env: Uat, Repo: ${{ github.event.repository.name }}] GitHub Action build/deploy complete, result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+      #         "blocks": [
+      #           {
+      #             "type": "section",
+      #             "text": {
+      #               "type": "mrkdwn",
+      #               "text": "[Env: Uat, Repo: ${{ github.event.repository.name }}] GitHub Action build/deploy complete, result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+      #             }
+      #           }
+      #         ]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_UAT }}
+      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

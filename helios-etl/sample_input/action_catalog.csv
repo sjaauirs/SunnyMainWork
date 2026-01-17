@@ -1,0 +1,183 @@
+TaskHeader	RewardAmount	CTA	TaskDescription	CohortLabel	DeepLink	OverallPriority	TaskExternalCode
+Ease your lower back pain	100	Enroll Now	"Does back pain keep you from enjoying life? Take advantage of virtual physical therapy.
+{{BULLET}} Reduce your pain.
+{{BULLET}} Save money on medical expenses.
+{{BULLET}} Do it when it is conveneint for you."	lowbackpain_notenrolled18up		2	ease_your_lowe_back_pain
+Ease Shoulder Pain	100	Learn More	"Does shoulder back pain keep you from enjoying life? Take advantage of virtual physical therapy.
+{{BULLET}} Reduce your pain.
+{{BULLET}} Save money on medical expenses.
+{{BULLET}} Do it when it is conveneint for you."	shoulderpain_notenrolled18up		3	ease_shou_pain
+Support for your new diagnosis	50	Contact Us	"Recently diagnosed with a new chronic condition?  Talk with your dedicated nurse today.  Your nurse will 
+{{BULLET}} answer questions about the condition and/or benefits.
+{{BULLET}} help navigate the care and resources you need.
+{{BULLET}} advocate for you.  "	chroniccondition_list1		4	supp_for_your_new_diag
+Enroll in pre diabetes program	50	Enroll Now	"Take control of your health now to avoid diabetes in the future. Enroll in the free pre diabetes program and learn how to 
+{{BULLET}} select and prepare healthy foods.
+{{BULLET}} maintain a healthy weight.
+{{BULLET}} save money by avoiding medication."	prediabetic_notenrolled		5	enro_in_pre_diab_prog
+Enroll in a diabetes program	100	Enroll Now	"Managing your diabetes is key to your long term health.  Enroll in our free diabetes program.  
+{{BULLET}} Learn practical tips to manage your condition.
+{{BULLET}} Access tools to monitor your health.
+{{BULLET}} Meet your health coach to support you. "	unmanaged_diabetic_notenrolled		6	enro_in_a_diab_prog
+Enroll in Asthma/COPD program	100	Enroll Now	"Breathe easier!  Check out our free program to support your respiratory health.
+{{BULLET}} Access tools to help monitor your health.
+{{BULLET}} Receive support from a health coach.
+{{BULLET}} Track your progress."	asthma_or_copd_notenrolled		7	enro_in_asth_prog
+Complete our weight loss program	75	Enroll Now	"A healthy weight improves sleep, eases joint pain and reduces the risk for heart disease, cancer, diabetes, and more.  Join our free program to access
+{{BULLET}} Practical tips to plan and prepare healthy foods.
+{{BULLET}} Easy to implement fitness activities.
+{{BULLET}} A dedicated health coach to support you."	bmi25up_notenrolled18up		8	comp_our_weig_loss_prog
+Complete your Osteoporosis Screening	50	Learn More	"If you have osteoporosis or are at risk, be proactive to prevent fractures.
+{{BULLET}}Bone density testing can alert you to potential fracture risk.   
+{{BULLET}} Call your PCP and make an appointment today for a safer tomorrow."	unscreenedosteof65upm70up		9	comp_your_oste_scre
+Complete your Mammogram	100	Find a Provider	"For many women, mammograms are the best way to detect breast cancer early.  
+{{BULLET}}  Early detection improves treatment outcomes and survival rates. 
+{{BULLET}} Family history increases your risk.
+{{BULLET}} Find a provider in-network and we will cover the cost.
+"	unscreenedmammogramf40up		10	comp_your_mamm
+Complete your Prostate Screening	100	Learn More	"Prostate cancer caught early is treatable and curable.  Visit your PCP for this easy, painless exam and peace of mind.  Make your appointment today."	prostate_unscreened_male45_70		11	comp_your_pros_scre
+Complete your Cervical Cancer Screening	100	Find a Provider	"Cervical cancer screening detects cell changes of the cervix.  
+{{BULLET}} Early detection is key to preventing cancer progression and saving lives. 
+{{BULLET}} Find an in-network provider and schedule today.
+{{BULLET}} We will cover the cost."	unscreenedcervicalcancerf25_65		12	comp_your_cerv_canc_scre
+Complete your Colorectal Screening	100	Find a Provider	"Detecting cancer early saves lives! 
+{{BULLET}} A colonoscopy is an important preventive health screening to catch cancer early and treat it.  
+{{BULLET}} Personal or family history, lifestyle factors and inflammoatory bowel disease increase your risk. 
+{{BULLET}} Find a provider in-network and schedule today.
+{{BULLET}} We will cover the cost."	unscreenedcolorectalcancer45up		13	comp_your_colo_scre
+Complete your Skin Cancer Screening	75	Find a Provider	"Skin cancer screening is the best way to detect cancer at an early stage. 
+{{BULLET}} Early detection means the chance of a cure is high.
+{{BULLET}}Family history, eye color, skin tone and hair color can increase your risk.
+{{BULLET}} Find a dermatologist and schedule your appointment today."	unscreenedskincancer25up		14	comp_your_skin_canc_scre
+Complete your Spirometry Measure	50	Learn More	"Breathe easier knowing your lungs are performing their best.  
+{{BULLET}} Spirometry is used to diagnose asthma and other lung conditions that affect breathing.  
+{{BULLET}} Call your PCP and make your appointment today."	chroniclungdisorder_unscreened		15	comp_your_spir_meas
+Complete your diabetic eye exam	50	Find a Provider	Being diabetic means your vision is at risk.  Regular eye exams with an opthamologist (aka Eye Doctor) is important to maintaining your vision.  Find a provider and book your appointment today.	unscreenedeyeexam_diabetic		16	comp_your_diab_eye_exam
+Complete your Diabetic Nephropathy Screening	50	Learn More	"Did you know being diabetic increases the risk for Chronic Kidney Disease (CKD)?
+{{BULLET}} CKDh increases your risk for heart disease and stroke.
+{{BULLET}} Stay on top of your health.
+{{BULLET}} Call your PCP to get screened with a simple urine test. "	unscreenedurinetest_diabetic		17	comp_your_diab_neph_scre
+Complete your Diabetic AIC	50	Learn More	Managing your diabetes means having your A1C checked regularly.  Be proactive to avoid complications - schedule your next AIc Test today.	unscreeneda1c_diabetic		18	comp_your_diab_aic
+Get your Pneumococcal Vaccine	50	Schedule Now	"Breathe easy!  Get your Pneomococcal Vaccine today!
+ {{BULLET}} Reduce your risk of series illnesses and hospitalization.  
+{{BULLET}} Check with you PCP or local pharmacy to get your FREE vaccine
+Protect yourself and those you love."	pneu_unvaccinated65up		19	get_your_pneu_vacc
+Complete your in Home Health assessment	100	Schedule Now	"Keep yourself healthy with a home assessment.  
+{{BULLET}} A clinical professional will come to you.
+{{BULLET}} Assess your health where you are comfortable.
+{{BULLET}} Learn more about your benefits to get the most out of your health plan.   "	prescribedinhomehealthcare		20	comp_your_in_home_heal_asse
+Complete Smoking Cessation Program	100	Enroll Now	"Are you ready to quit?  Enroll in our Free smoking cessation program.
+{{BULLET}} Reduce your risk for illness and save money.
+{{BULLET}} Get the support you deserve to succeed.
+{{BULLET}} Access tools to help you stop smoking.
+Begin living your healthiest life today!. "	smoker18up		21	comp_smok_cess_prog
+Select your OB/GYN	50	Search Providers	Finding a high quality provider you trust to help support you on your new journey into parenthood matters.  Find your match today.	pregnant_noobgynvisit18up		22	sele_your_obg
+Select a Pediatrician	50	Search Providers	"As a parent, making sure your child(ern) receives the very best care is top of mind.  Select a high quality provider you trust. "	pregnant_or_needspediatrician18up		23	sele_a_pedi
+Thinking about starting a family?	25	Learn More	"This is intended to link to maternity, paternity, fertility and adoption benefits.  "	marriedorpartnered18_40		24	thin_abou_star_a_fami
+Saving for college	75	Save Today	"Invest in your greatest assets -- your children. 
+{{BULLET}} Learn about the benefits of a 529 college savings plan.  
+{{BULLET}} Start saving for the future today."	employee_under18dependents		25	savi_for_coll
+Complete your annual wellness visit	75	Schedule Now	"An Annual Wellness visit with your primary care provider (PCP) keeps your health on track.
+{{BULLET}} Catch problems early before they turn serious 
+{{BULLET}} Make an appointment with your trusted provider today
+{{BULLET}} Stay on top of your health and live your best life."	nonwellnessexam		26	comp_your_annu_well_visi
+Get your Flu Shot	50	Schedule Now	"Stay healthy this flu season - get vaccinated! 
+{{BULLET}} Reduce your risk of serious illnesses, hospitalizations and unexpected medical costs.  
+{{BULLET}} Check with your PCP or local pharmacy to get your FREE vaccine scheduled today.
+Protect yourself and those you love."	noflushot		27	get_your_flu_shot
+Get your Covid Vaccine	50	Schedule Now	"COVID vaccines save lives - schedule yours today!
+{{BULLET}} Reduce your risk of serious illness and hospitalization
+{{BULLET}} Avoid unplanned time away from work 
+{{BULLET}} Check with your PCP or local pharmacy to get your FREE vaccine this month.
+  "	noncovidvaccinated		28	get_your_covi_vacc
+Complete your biometric screening	50	Schedule Now	"Biometric screenings inform you about key indicators of your health.  
+{{BULLET}} Identify risks early to avoid long term health issues  
+{{BULLET}} Know your numbers for improved health
+{{BULLET}} Schedule your FREE screening for peace of mind"	nonbiometricscreening		29	comp_your_biom_scre
+Select your PCP	25	Search Providers	"A Primary Care provider (PCP) is your got to for your overall health and healthcare needs.  They provide comprehensive care just for you. Live healthy, choose one today!"	nopcpselected18up		30	sele_your_pcp
+Join a step challenge	25	Join Now	"Enjoy the road to better health with some healthy competition!  Get moving for improved health, reduced stress and be rewarded.  Join the step challenge today!"	everyone		31	join_a_step_chal
+Sync a device	25	Sync Now	Every step counts - let us track your steps and motivate you to keep active.  Sync your device and earn points.  Simple as that!	nofitnessdevicesync		32	sync_a_devi
+Eat smart for better health	50	Search Providers	"Ever wonder if you are eating right to enhance energy, support overall health, improve sleep, and beyond?  Take advantage of X free visits with a registered dietician. Use one or all X."	nondieticianvisit		33	eat_smar_for_bett_heal
+Join a wellness mission	15	Begin Now	Not sure if we provide short term goal setting but if so this would provide consumer choice and could also tie back to personalizing recommendations from the wellness assessment if offered and no claims data is available	adult18up		34	join_a_well_miss
+Your mind matters	25	Start Now	"Your mind and body are interconnected. Keep a pulse on your mental health.
+{{BULLET}} Complete a short assessment
+{{BULLET}} Review your results
+{{BULLET}} Check out what is available to you"	nobehavioralhealthclaim18up		35	your_mind_matt
+Meeting You Where You Are	100	Enroll Now	"Life throws curve balls. Take advantage of virtual behavior health appointments to get through it.  
+{{BULLET}} Talk with a licensed counselor when and where it is convenient for you.
+{{BULLET}} Get the tools and support you deserve."	nonenrolledvirtualbehavioralhealth		36	meet_you_wher_you_are
+Life Can be Stressful	50	Schedule Now	"Feeling overwhelmed, anxious, sad?  
+{{BULLET}} Speak to a professional for practical tips to get through it.
+{{BULLET}} Check out the Employee Assistance Program (EAP)
+{{BULLET}} Available 24/7, 365 days for FREE to you and your family"	everyone		37	life_can_be_stre
+Reduce Stress -Talk it Out	50	Learn More	"Work or home have your stressed, not sleeping, unable to focue?  Talking to someone can help.
+{{BULLET}} Check out the Employee Assistance Program (EAP)
+{{BULLET}} Available 24/7, 365 days
+{{BULLET}} FREE to you and your family"	everyone		38	redu_stre_tal_it_out
+Keep Calm and Carry On	25	Explore now	"Daily meditation, even just a few minutes, improves health.
+{{BULLET}} Reduce stress, blood pressure, and pain
+{{BULLET}} Improve sleep and concentration
+{{BULLET}} Better manage weight and mood
+Learn easy techniques to apply whenever and whereever."	everyone		39	keep_calm_and_carr_on
+Understand your health plan options - use decision support tools	25	Decide Now	Decision support tools make choosing the best health plan easier.  Find the plan that meets your needs and budget. We are here to help. 	employee		40	unde_your_heal_plan_opti_use_deci_supp_tool
+Save money with an HSA	100	Learn More	"Did you know enrolling in a health savings account has a triple tax advantage?  
+{{BULLET}} Maximize your contribution
+{{BULLET}} Invest your dollars
+{{BULLET}} Save for the future
+Do not miss out - learn more today.  "	employee		41	save_mone_with_an_hsa
+Complete your Health Plan Enrollment Early	50	Enroll Today	It's that time of year again!  Review and enroll in your benefits by X and we will reward you for making that decision early.	employee		42	comp_your_heal_plan_enro_earl
+Understand your Benefits (condition specific)	25	Learn More	"XXXX offers many benefits to support your health and ease costs. 
+{{BULLET}} Benefits are designed to help you live healthier
+{{BULLET}} Access benefits when you need them
+{{BULLET}} Know what is available to save you time and money.
+"	employee		43	unde_your_bene_con_spec
+Remember those you love	25	Review Now	"Our lives can change quickly.  
+{{BULLET}} Make sure your beneficiaries are up-to-date
+{{BULLET}} Be sure your assets go where you want them to go.  
+{{BULLET}}  Review and make updates as needed."	employee		44	reme_thos_you_love
+Take advantage of discounts just for you	25	Learn More	 XXXX offers you discounts with a variety of retailers and products.  Take advantage of all that is available to help you grow your wellness and keep more money in your pocket.	employee		45	take_adva_of_disc_just_for_you
+Save Money on Prescriptions	75	Enroll Now	"By switching from a brand drug to a generic drug, you save money each month.  Explore your options and talk with your pharmacists. "	genericrxavailable18up		46	save_mone_on_pres
+Mail Order Pharmacy	75	Enroll Now	"Save money when persciptions are delivered. Take 2 minutes to start saving.
+{{BULLET}} Enroll in the FREE mail order pharmacy program 
+{{BULLET}} Get your next refill delivered to your door
+"	nonmailorder_rxplan		47	mail_orde_phar
+Enroll in Telehealth program	25	Enroll Now	"Want quick access to care when not feeling well?
+{{BULLET}} Meet with a physician virtually 24/7, 365 days
+{{BULLET}} Availabe no matter where you are  
+{{BULLET}} Save time on your first visit by enrolling now"	nonenrolledtelehealth18up		48	enro_in_tele_prog
+Enroll today to access Virtual Behavioral Health 	100	Enroll Now	"Behavioral therapy helps you be healthy for those you love.
+{{BULLET}} Select a licensed counselor you can trust
+{{BULLET}} Access behavior health services virtually at a time convenient for you
+{{BULLET}} Gain the tools and support you deserve"	nonenrolledvirtualbehavioralhealth		49	enro_toda_to_acce_virt_beha_heal_
+Have a virtual Dr visit	50	Schedule Now	"Not feeling well, have a nagging cough or a rash?  {{BULLET}} Speak to a provider when it fits your schedule
+{{BULLET}} The provider will review your symptoms and develop a treatment plan
+{{BULLET}} Telehealth is available 24/7, 365 days to get you feeling like yourself fast"	adult18up		50	have_a_viru_dr_visi
+Saving for your retirement	100	Invest Today	"Retirement can seem a long way off or just around the corner. 
+{{BULLET}} It's never to early or late to maximize savings.  
+{{BULLET}} Learn the benefits of your 401K.
+{{BULLET}} Invest in you today.  "	non401kcontributingemployee		51	savi_for_your_reti
+Invest your HSA Dollars	50	Invest Today	Did you know you can invest your HSA dollares?  Invest your HSA dollars to make money on your healthcare dollars.  Take a look at your options and start earning.	hsaenrolled		52	inve_your_hsa_doll
+Meet with a Financial Advisor	50	Schedule Now	"Have you met with a Financial Advisor?  
+{{BULLET}} Gain valuable insights
+{{BULLET}} Access tools to support your retirement goals  
+{{BULLET}} Meet with one for FREE to put your financial plan into action."	employee		53	meet_with_a_fina_advi
+Consider an IRA for Retirement Savings	25	Learn More	"IRAs are a valuable tool for saving for retirement.  
+Learn more about the difference between a Roth and Traditional IRA.  One of these may be a great option for you."	noniracontributingemployee		54	cons_an_ira_for_reti_savi
+Become Financially Savy	25	Explore Now	"Take advantage of live and on-demand financial webinars to grow your financial IQ.  Learn more about:
+{{BULLET}} Protecting your assets
+{{BULLET}} Retirment planning 
+{{BULLET}} Understanding the markets
+{{BULLET}} Building a budget
+We have you covered. (Up to 4 sessions rewarded per year)"	portalavailableemployee		55	beco_fina_savy
+Make a budget	50	Learn More	"Budgets help build financial confidence and stability. They make it easy to:
+{{BULLET}} Pay bills on time 
+{{BULLET}} Build an emergency fund
+{{BULLET}} Save for future expenses, think vacation or a new appliance.
+Begin building your budget today!"	everyone		56	make_a_budg
+Are you on track for retirment?	25	Check it Out	Not sure if you are on track for retirement?  Assess your financail health with the free Financial Check-up tool so you can retire when you are ready.	employee		57	are_you_on_trac_for_reti
+Explore different ways to save money	25	Learn More	Discover how you can make your money work for you.  Explore options to save money and offer you peace of mind. Save wisely for a brighter future.	everyone		58	expl_diff_ways_to_save_mone
+You've earned it - Take it	25	Start Planning	TBD	employee		59	you_earn_it_take_it
+Grow your Career	20	Learn More	TBD	employee		60	grow_your_care
+Volunteer your time 	25	Learn More	TBD	employee		61	volu_your_time_
+Boost your health - Connect with others	25	View Calendar	TBD	employee		62	boos_your_heal_conn_with_othe
+Giving Matters	25	Give Today	TBD	employee		63	givi_matt

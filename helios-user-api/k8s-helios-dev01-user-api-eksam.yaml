@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: user-api-sa
+  namespace: helios-dev01
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::375611915274:role/helios-dev01-user-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-api
+  namespace: helios-dev01
+  labels:
+    app: user-api
+spec:
+  selector:
+    app: user-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api-deployment
+  namespace: helios-dev01
+  labels:
+    app: user-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2 
+    spec:
+      serviceAccountName: user-api-sa
+      containers:
+      - name: user-api
+        image: 375611915274.dkr.ecr.us-east-2.amazonaws.com/helios-dev01-user-api-ecr:IMAGETAG
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"   
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Dev01

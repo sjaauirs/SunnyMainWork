@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.ETL.App", "src\App\SunnyRewards.Helios.ETL.App.csproj", "{2A31FF28-BDC9-474C-9C40-9B068EB7244E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.ETL.Core", "src\Core\SunnyRewards.Helios.ETL.Core.csproj", "{06C3BD6E-EA13-4875-A225-940666BDD034}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.ETL.Infrastructure", "src\Infrastructure\SunnyRewards.Helios.ETL.Infrastructure.csproj", "{5BF5F5AF-88A4-415C-803B-FCFF241D2BB1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.ETL.Common", "src\Common\SunnyRewards.Helios.ETL.Common.csproj", "{2F4BA6D7-A580-465A-822B-181E14342346}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyGeneratorApp", "utilities\KeyGeneratorApp\KeyGeneratorApp.csproj", "{3B29BC2E-F3A3-4D32-97D7-F506BD31E561}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.ETL.UnitTests", "src\UnitTests\SunnyRewards.Helios.ETL.UnitTests.csproj", "{B02CCBB2-5D4C-4DE7-8525-332E45115CF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A31FF28-BDC9-474C-9C40-9B068EB7244E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A31FF28-BDC9-474C-9C40-9B068EB7244E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A31FF28-BDC9-474C-9C40-9B068EB7244E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A31FF28-BDC9-474C-9C40-9B068EB7244E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06C3BD6E-EA13-4875-A225-940666BDD034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06C3BD6E-EA13-4875-A225-940666BDD034}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06C3BD6E-EA13-4875-A225-940666BDD034}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06C3BD6E-EA13-4875-A225-940666BDD034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BF5F5AF-88A4-415C-803B-FCFF241D2BB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BF5F5AF-88A4-415C-803B-FCFF241D2BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BF5F5AF-88A4-415C-803B-FCFF241D2BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BF5F5AF-88A4-415C-803B-FCFF241D2BB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F4BA6D7-A580-465A-822B-181E14342346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4BA6D7-A580-465A-822B-181E14342346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F4BA6D7-A580-465A-822B-181E14342346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4BA6D7-A580-465A-822B-181E14342346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B29BC2E-F3A3-4D32-97D7-F506BD31E561}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B29BC2E-F3A3-4D32-97D7-F506BD31E561}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B29BC2E-F3A3-4D32-97D7-F506BD31E561}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B29BC2E-F3A3-4D32-97D7-F506BD31E561}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B02CCBB2-5D4C-4DE7-8525-332E45115CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B02CCBB2-5D4C-4DE7-8525-332E45115CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B02CCBB2-5D4C-4DE7-8525-332E45115CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B02CCBB2-5D4C-4DE7-8525-332E45115CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38BC502A-29FA-4130-B748-74A70B2E3137}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,177 @@
+-- ============================================================================
+-- This script performs the following operations:
+-- 1. Creates a new cohort (if it doesn't already exist).
+-- 2. Creates a task associated with the cohort (if not already present).
+-- 3. Adds task details for the task and tenant combination (if not existing).
+-- 4. Configures a task reward with specific reward settings (only if not present).
+-- 5. Links the newly created (or existing) cohort to the task reward.
+-- 
+-- Each insert operation includes existence checks to prevent duplicates.
+-- Informative notices are raised to indicate whether a record was inserted
+-- or already existed and was reused.
+-- ============================================================================
+
+DO $$
+DECLARE  
+    v_cohort_name TEXT := 'sweepstakes_winners';
+	v_task_detail_name TEXT := 'Sweepstakes Winner';
+    v_task_external_code TEXT := 'swee_winn';
+    v_tenant_code TEXT := 'ten-ecada21e57154928a2bb959e8365b8b4';
+    v_task_type_code TEXT := 'tty-dc2638e6ba2c47d4be6921e68175f43d';
+    v_task_reward_type_code TEXT := 'rtc-a5a943d3fc2a4506ab12218204d60805';
+    v_reward_amount NUMERIC := 25;
+
+	--Auto generated
+    v_cohort_id BIGINT;
+    v_cohort_code TEXT;
+    v_task_code TEXT;
+    v_task_type_id BIGINT;
+    v_task_id BIGINT;
+	v_task_detail_id BIGINT;
+    v_task_reward_type_id BIGINT;
+	v_task_reward_id BIGINT;
+    v_task_reward_code TEXT;
+
+BEGIN
+    BEGIN
+        v_cohort_code := 'coh-' || REPLACE(gen_random_uuid()::text, '-', '');
+
+        INSERT INTO cohort.cohort (
+            cohort_code, cohort_name, cohort_description, parent_cohort_id, cohort_rule, 
+            create_ts, update_ts, create_user, update_user, delete_nbr, cohort_enabled
+        )
+        SELECT v_cohort_code, v_cohort_name, 'This is a sample sweepstakes winners cohort', NULL, '{}'::jsonb,
+            NOW(), NULL, 'SYSTEM', NULL, 0, true
+        WHERE NOT EXISTS (
+            SELECT 1 FROM cohort.cohort WHERE cohort_name = v_cohort_name AND delete_nbr = 0
+        )
+        RETURNING cohort_id INTO v_cohort_id;
+
+        IF FOUND THEN
+            RAISE NOTICE 'Inserted into cohort.cohort: cohort_id=%, cohort_code=%', v_cohort_id, v_cohort_code;
+        ELSE
+            SELECT cohort_id INTO v_cohort_id
+            FROM cohort.cohort
+            WHERE cohort_name = v_cohort_name AND delete_nbr = 0;
+
+            RAISE NOTICE 'Cohort already exists: cohort_id=%', v_cohort_id;
+        END IF;
+
+        SELECT task_type_id INTO v_task_type_id  
+        FROM task.task_type
+        WHERE task_type_code = v_task_type_code AND delete_nbr = 0
+        LIMIT 1; 
+
+        IF v_task_type_id IS NULL THEN  
+            RAISE EXCEPTION 'task_type_code "%" not found', v_task_type_code;
+        END IF;
+
+        v_task_code := 'tsk-' || REPLACE(gen_random_uuid()::text, '-', '');
+
+        INSERT INTO task.task (
+            task_type_id, task_code, task_name, create_ts, update_ts, create_user, 
+            update_user, delete_nbr, self_report, confirm_report, task_category_id, is_subtask
+        )
+        SELECT v_task_type_id, v_task_code, v_cohort_name, NOW(), NULL, 'SYSTEM', NULL, 0, false, false, NULL, false 
+        WHERE NOT EXISTS (
+            SELECT 1 FROM task.task WHERE task_name = v_cohort_name AND delete_nbr = 0
+        )
+        RETURNING task_id INTO v_task_id;
+
+        IF FOUND THEN
+            RAISE NOTICE 'Inserted into task.task: task_id=%, task_code=%', v_task_id, v_task_code;
+        ELSE
+            SELECT task_id INTO v_task_id
+            FROM task.task
+            WHERE task_name = v_cohort_name AND delete_nbr = 0;
+
+            RAISE NOTICE 'Task already exists: task_id=%', v_task_id;
+        END IF;
+
+        INSERT INTO task.task_detail (
+            task_id, language_code, task_header, task_description, terms_of_service_id, 
+            create_ts, update_ts, create_user, update_user, delete_nbr, 
+            task_cta_button_text, tenant_code
+        )
+        SELECT v_task_id, 'en-US', v_task_detail_name, 'Sample task detail description', 1, 
+               NOW(), NULL, 'SYSTEM', NULL, 0, 'Learn More', v_tenant_code 
+        WHERE NOT EXISTS (
+            SELECT 1 FROM task.task_detail 
+            WHERE task_id = v_task_id AND tenant_code = v_tenant_code AND delete_nbr = 0
+        );
+
+        IF FOUND THEN
+            RAISE NOTICE 'Inserted task_detail for task_id=%', v_task_id;
+        ELSE
+            SELECT task_detail_id INTO v_task_detail_id
+            FROM task.task_detail
+            WHERE task_id = v_task_id AND tenant_code = v_tenant_code AND delete_nbr = 0;
+
+            RAISE NOTICE 'Task detail already exists: task_detail_id=%', v_task_detail_id;
+        END IF;
+
+        SELECT reward_type_id INTO v_task_reward_type_id  
+        FROM task.reward_type
+        WHERE reward_type_code = v_task_reward_type_code
+        LIMIT 1; 
+
+        IF v_task_reward_type_id IS NULL THEN  
+            RAISE EXCEPTION 'reward_type_code "%" not found', v_task_reward_type_code;
+        END IF;
+
+        v_task_reward_code := 'trw-' || REPLACE(gen_random_uuid()::text, '-', '');
+
+        INSERT INTO task.task_reward (
+            task_id, reward_type_id, tenant_code, task_reward_code, reward, min_task_duration, 
+            max_task_duration, expiry, priority, create_ts, update_ts, create_user, 
+            update_user, delete_nbr, task_action_url, task_external_code, valid_start_ts, 
+            is_recurring, recurrence_definition_json, self_report, task_completion_criteria_json, 
+            confirm_report, task_reward_config_json, is_collection
+        )
+        SELECT v_task_id, v_task_reward_type_id, v_tenant_code, v_task_reward_code, 
+            jsonb_build_object('rewardType', 'MONETARY_DOLLARS', 'rewardAmount', v_reward_amount, 'membershipType', NULL), 
+            0, 0, '2100-01-01 00:00:00', -10, NOW(), NULL, 'SYSTEM', NULL, 0, NULL, v_task_external_code, 
+            '2025-01-01 00:00:00', true, 
+            '{"periodic": {"period": "MONTH","maxOccurrences": 1,"periodRestartDate": "1"},"recurrenceType": "PERIODIC"}'::jsonb, 
+            false, NULL, false, '{}'::jsonb, false 
+        WHERE NOT EXISTS (
+            SELECT 1 FROM task.task_reward 
+            WHERE task_id = v_task_id AND tenant_code = v_tenant_code AND delete_nbr = 0
+        );
+
+        IF FOUND THEN
+            RAISE NOTICE 'Inserted task_reward: task_reward_code=%', v_task_reward_code;
+        ELSE
+            SELECT task_reward_code INTO v_task_reward_code
+            FROM task.task_reward 
+            WHERE task_id = v_task_id AND tenant_code = v_tenant_code AND delete_nbr = 0;
+
+            RAISE NOTICE 'Task reward already exists: task_reward_code=%', v_task_reward_code;
+        END IF;
+
+        INSERT INTO cohort.cohort_tenant_task_reward (
+            cohort_id, tenant_code, task_reward_code, recommended, priority, 
+            create_ts, update_ts, create_user, update_user, delete_nbr
+        )
+        SELECT v_cohort_id, v_tenant_code, v_task_reward_code, true, -10, 
+            NOW(), NULL, 'SYSTEM', NULL, 0 
+        WHERE NOT EXISTS (
+            SELECT 1 FROM cohort.cohort_tenant_task_reward 
+            WHERE cohort_id = v_cohort_id AND tenant_code = v_tenant_code 
+            AND task_reward_code = v_task_reward_code AND delete_nbr = 0
+        );
+
+        IF FOUND THEN
+            RAISE NOTICE 'Linked cohort to task_reward successfully.';
+        ELSE
+            RAISE NOTICE 'Link between cohort and task_reward already exists.';
+        END IF;
+
+        RAISE NOTICE 'Script completed successfully.';
+
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE NOTICE 'Error occurred: %', SQLERRM;
+            RAISE EXCEPTION 'Transaction rolled back due to error.';
+    END;
+END $$;

@@ -1,0 +1,83 @@
+name: Deploy to Dev01
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "58 2 * * *"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check runner timezone
+        run: |
+          echo "Current date and time:"
+          date
+          echo "Time zone info:"
+          timedatectl || cat /etc/timezone
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get eligible tag for scheduled deploy
+        id: select_tag
+        run: |
+          echo "Scheduled Dev01 deployment"
+          CUTOFF_TS=$(date -u -d "24 hours ago" +%s)
+          TAG=$(git for-each-ref \
+            --sort=creatordate \
+            --format '%(refname:short) %(creatordate:unix)' \
+            refs/tags | \
+            awk -v cutoff="$CUTOFF_TS" '$2 <= cutoff { print $1 }' | \
+            tail -n 1)
+          if [ -z "$TAG" ]; then
+            echo "No tag older than 24 hours found"
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "deploy=true" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT           
+
+      - name: Checkout repository with eligible tag
+        if: ${{ steps.select_tag.outputs.deploy == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.select_tag.outputs.tag }}
+
+      - name: Configure AWS credentials
+        if: ${{ steps.select_tag.outputs.deploy == 'true' }}      
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        if: ${{ steps.select_tag.outputs.deploy == 'true' }}
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        if: ${{ steps.select_tag.outputs.deploy == 'true' }}
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image
+        if: ${{ steps.select_tag.outputs.deploy == 'true' }}
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/helios-dev01-benefits-bff-api-ecr:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/helios-dev01-benefits-bff-api-ecr:$GITHUB_RUN_ID
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-dev01-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        if: ${{ steps.select_tag.outputs.deploy == 'true' }}
+        run: |
+          aws eks update-kubeconfig --name helios-dev01-eks --region us-east-2
+          # kubectl apply -f benefits-bff-api-dev-external-secret.yaml
+          kubectl apply -f helios-dev01-manifest-benefits-bff-api-eksam.yaml

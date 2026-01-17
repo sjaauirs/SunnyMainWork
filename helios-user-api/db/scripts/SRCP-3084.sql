@@ -1,0 +1,2 @@
+ALTER TABLE huser.consumer_login
+ADD COLUMN IF NOT EXISTS user_agent VARCHAR(100) NULL;

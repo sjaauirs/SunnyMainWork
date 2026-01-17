@@ -1,0 +1,72 @@
+{
+  "trivia": {
+    "triviaTaskExternalCode": "play_nove_triv",
+    "ctaTaskExternalCode": "make_a_budg",
+    "config": {
+      "ux": {
+        "questionIcon": {
+          "url": "",
+          "bgColor": "#111111",
+          "fgColor": "#FFFFFF"
+        },
+        "backgroundUrl": "",
+        "wrongAnswerIcon": {
+          "url": "",
+          "bgColor": "#FF0000",
+          "fgColor": "#FFFFFF"
+        },
+        "correctAnswerIcon": {
+          "url": "",
+          "bgColor": "#111111",
+          "fgColor": "#FFFFFF"
+        }
+      }
+    }
+  },
+  "triviaQuestions": [
+    {
+      "questionExternalCode": "what_is_the_worl_most_trad_curr",
+      "answerText": [
+        "Euro",
+        "U.S. Dollar",
+        "Japanese Yen"
+      ],
+      "answerType": "SINGLE",
+      "layoutType": "BUTTON",
+      "questionText": "What is the world’s most traded currency?",
+      "correctAnswer": [
+        1
+      ]
+    },
+    {
+      "questionExternalCode": "atm_is_a_comm_mach_in_acco_and_fina_fiel",
+      "answerText": [
+        "Time",
+        "Talk",
+        "Teller",
+        "Tally"
+      ],
+      "answerType": "SINGLE",
+      "layoutType": "BUTTON",
+      "questionText": "ATM is a common machine in Accounting and Finance field. What does the letter T in ATM stand for?",
+      "correctAnswer": [
+        2
+      ]
+    },
+    {
+      "questionExternalCode": "whic_of_thes_term_refe_to_payi_off_a_debt",
+      "answerText": [
+        "Amortization",
+        "Repay",
+        "Insolvency",
+        "Liquidation"
+      ],
+      "answerType": "SINGLE",
+      "layoutType": "BUTTON",
+      "questionText": "Which of these terms refers to paying off a debt over time?",
+      "correctAnswer": [
+        0
+      ]
+    }
+  ]
+}

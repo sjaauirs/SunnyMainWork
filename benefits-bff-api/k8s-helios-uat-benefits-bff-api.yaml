@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: benefits-bff-uat-api
+  namespace: helios-uat
+spec:
+  selector:
+    # matchLabels:
+      app: benefits-bff-uat-api
+     # matchExpressions:
+      #- {key: app, operator: In, values: [bff-api, user-api, wallet-api]}
+  ports:
+    - name: https
+      port: 443
+      targetPort: 5001
+    - name: http
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benefits-bff-uat-api-deployment
+  namespace: helios-uat
+  labels:
+    app: benefits-bff-uat-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: benefits-bff-uat-api
+  template:
+    metadata:
+      labels:
+        app: benefits-bff-uat-api
+    spec:
+      serviceAccountName: externalsecretsa
+      containers:
+      - name: benefits-bff-uat-api
+        image: 590183943866.dkr.ecr.us-east-2.amazonaws.com/helios-uat-benefits-bff-api:IMAGETAG
+        ports:
+          - name: http
+            containerPort: 5001
+            protocol: TCP
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Uat            
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/load-balancer-name: helios-uat-benefits-bff-lb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/subnets: subnet-01aa62e9e0a455a7c,subnet-0c70e725103bd7937,subnet-044397354d4acd4cf
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:590183943866:certificate/fa871984-17b4-4901-8038-bfda6439cbcd
+    # Define the path and port for the health check
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: benefits-bff-uat-api
+  name: benefits-bff-uat-api-ingress
+  namespace: helios-uat
+spec:
+  tls:
+    - hosts:
+        - benefits-api.uat.sunnyrewards.com
+      secretName: sunnyrewardsstaruatcert
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: benefits-bff-uat-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific

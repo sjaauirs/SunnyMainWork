@@ -1,0 +1,246 @@
+{
+  "profiles": {
+    "App": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskUpdateFilePath \"C:\\tmp\\test-update-file.csv\"",
+      //"commandLineArgs": "--tenantCode ten-87cfa20e9d7140ec9294ae3342d79db0 --startIndex  0 --maxEnrollments 10 --memberFilePath \"C:\\tmp\\MEMBER_IN_2.txt\" --enrollmentFilePath \"C:\\tmp\\ENROLLMENT_IN_2.txt\" --enableEnrollment --enableMemberLoad"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\action_catalog_trivia.csv\""
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\benifitFocusAlphaGroupAxtions1.txt\""
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --triviaImportFilePath \"C:\\tmp\\trivia_import2.json\""
+      //"commandLineArgs": "--subscriberOnly --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --enableS3 --scanS3FileTypes SUBSCRIBER_ONLY_MEMBER_IMPORT"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --enableS3 --scanS3FileTypes TASK_UPDATE"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --memberImportFilePath \"C:\\Users\\Kawalpreet.kaur\\Downloads\\etl_member_import_file-kp-qa-5.txt\" --enableMemberImport"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --taskUpdateFilePath \"C:\\tmp\\test_update_file.csv\""
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --enableS3 --scanS3FileTypes MEMBER_IMPORT"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --enableS3 --scanS3FileTypes HSA_SWEEP"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --enableS3 --scanS3FileTypes MEMBER_IMPORT,TASK_IMPORT,TASK_UPDATE,TRIVIA_IMPORT,FIS_NON_MONETARY_TXN,FIS_MONETARY_TXN,HSA_SWEEP,MEMBER_TENANT_ENROLLMENT,PROCESS_PLD,CONSUMER_ATTRIBUTES"
+      // "commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex  0 --maxEnrollments 10 --memberImportFilePath \"C:\\tmp\\etl_member_import-29072024kusers-set1.txt\"  --enableMemberImport"
+      // "commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\feb_launch_restart_actions_2024-02-01.csv\""
+      // "commandLineArgs": "--tenantCode ten-e9f2574c16fc45d6bfa0046ebf5ea720 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\action_catalog_full_qa_bf_integ_test.csv\""
+      // "commandLineArgs": "--tenantCode ten-e9f2574c16fc45d6bfa0046ebf5ea720 --startIndex  0 --maxEnrollments 10 --memberImportFilePath \"C:\\tmp\\BF_SunnyCensusFile_2062025.txt\"  --enableMemberImport"
+      // "commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\List_of_Actions_Sunny_Team_Mar-2024.txt\""
+      // "commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex  0 --maxEnrollments 10 --memberImportFilePath \"C:\\tmp\\SunnyRewardsEmployeeOnboarding_2024-03-05.txt\"  --enableMemberImport"
+      // "commandLineArgs": "--tenantCode ten-1c9299089e804d3ca8ce4092037c7c68 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\Integ_Demo_SunnyActionCatalog_2024-03-14.txt\"",
+      // "commandLineArgs": "--tenantCode ten-596f8dc0062e11efbe2877e0e5e04b0f --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\Actions_Teresa_Demo_20240429.txt\"",
+      // "commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\may2024_sunny_impl_actions.txt\""
+
+      // trivia import
+      //"commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex 0 --maxEnrollments 0 --triviaImportFilePath \"C:\\tmp\\trivia_import_20240424.json\""
+
+      // Import member data with tab delimited format 
+      //"commandLineArgs": "--tenantCode ten-87cfa20e9d7140ec9294ae3342d79db0 --startIndex  0 --maxEnrollments 10 --memberImportFilePath \"C:\\tmp\\etl_member_import.txt\"  --enableMemberImport"
+
+      // Soft delete expired consumer tasks which are in pending state
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex  0 --maxEnrollments 10 --processRecurringTasks"
+
+      // Set entries (secondary) wallet balance=0.0 for all consumers of a given tenant
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex  0 --maxEnrollments 10 --clearWalletEntries"
+
+      // Command to redeem the entire balance from consumer wallets into the Health Savings Account (HSA) redemption wallet.
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --redeemConsumerListFilePath \"C:\\tmp\\hsa_xfer_20240626.txt\" --localDownloadFolderPath \"C:\\tmp\" --redeemHSA"
+
+      // Command to generate wallet balances report CSV file for a given wallet type
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --walletTypeCode wat-c3b091232e974f98aeceb495d2a9f916 --localDownloadFolderPath \"C:\\tmp\" --batchSize 500 --generateWalletBalancesReport"
+      // task import
+      // "commandLineArgs": "--tenantCode ten-1c9299089e804d3ca8ce4092037c7c68 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\Integ_Demo_SunnyActionCatalog_2024-03-14.txt\""
+      //"commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\Apr2024_ListofActions_SunnyTeam.txt\""
+
+
+      // consume retail-prod-sync queue
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --processRetailProductSyncQueue"
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --processRetailProductSyncQueue --batchOperationGroupCode bgc-262e7e2a84504b7b857e82914e8b19e6 --batchActionType All",
+
+      // generate card-create file:
+      //    "commandLineArgs": "--tenantCode ten-b4e920d3f6f74496ab533d1a9a8ef9e4 --startIndex 0 --maxEnrollments 0 --fisCreateCards  --localDownloadFolderPath \"C:\\tmp\" --batchOperationGroupCode 78e7f229c45904958eb93b59f7604f8d --batchActionType all --batchActionOptions all",
+
+      // consume health-metric queue
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --consumeHealthQueue"
+
+      // process benefits funding 
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskId 1 --year 2024 --month 03 --executeBenefitsFunding"
+      // consume health-metric queue
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --consumeHealthQueue",
+
+      // process benefits funding 
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --executeBenefitsFunding"
+
+      // generate card-load file:
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --generateCardLoad  --localDownloadFolderPath \"C:\\tmp\" --batchOperationGroupCode brc-78e7f229c45044958eb93b59f7604fbd --batchActionType All --batchActionOptions all",
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --generateCardLoad  --localDownloadFolderPath \"C:\\tmp\" --batchOperationGroupCode brc-78e7f229c45044958eb93b59f7604fbd --batchActionType All --batchActionOptions all --consumerListFile consumer_list_ten-ecada21e57154928a2bb959e8365b8b4_102420240640.txt"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --generateCardLoad  --localDownloadFolderPath \\\"C:\\\\tmp\\\" --batchOperationGroupCode brc-78e7f229c45044958eb93b59f7604fbd --batchActionType All --batchActionOptions all --consumerListFile \"C:\\tmp\\Consumer\\consumer_list_ten-ecada21e57154928a2bb959e8365b8b4_102420240640.txt\""
+
+
+      //FIS 30 record file load
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisRecordFileName \"8733430621202403.issuance.log.zip\" --fis30RecordFileLoad"
+      //FIS 60 record file load
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisRecordFileName \"8733430920202402.load.log\" --fis60RecordFileLoad"
+
+      //import monetary transactions file
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisMonetaryTransactionsFileName \"STDMON03102024_Sunny_Benefits_Inc.txt\" --processMonetaryTransactionsBatchFile"
+
+      // process health task
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskId 103 --rollupPeriodTypeName MONTH --year 2025 --month 01 --processHealthTask"
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisMonetaryTransactionsFileName \"STDMON03102024_Sunny_Benefits_Inc.txt\" --processMonetaryTransactionsBatchFile"
+
+      //import monetary transactions file
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisMonetaryTransactionsFileName \"STDMON03102024_Sunny_Benefits_Inc.txt\" --processMonetaryTransactionsBatchFile"
+
+      // Perform External Txn Sync:
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4,ten-87cfa20e9d7140ec9294ae3342d79db0 --startIndex 0 --maxEnrollments 0 --PerformExternalTxnSync"
+
+      // process health task
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskId 103 --rollupPeriodTypeName MONTH --year 2024 --month 01 --processHealthTask"
+
+      //execute cohorting
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --batchSize 500 --consumerListFile consumer_code_list.txt --cohortListFile cohort_code_list.txt --executeCohorting"
+
+      // Import member data with tab delimited format 
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --memberImportFilePath \"C:\\tmp\\etl_member_import_file-20sept2024-1206PM.txt\" --batchSize 500 --enableMemberImport"
+
+      //Import Consumer Non Monetary Transactions
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --consumerNonMonetaryTransactions --consumerNonMonetaryTransactionsFileName Non_Monetary_Transactions.txt.zip"
+
+      // IEncryptAndCopy
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --encryptAndCopy --fileName 8733430506202402issuance.txt --batchOperationGroupCode brc-78e7f229c45044958eb93b59f7604fbd",
+
+      // Generate Sweepstakes Entries Report
+      // "commandLineArgs": "--format realtime-media --sweepstakesInstanceId 2 --walletTypeCode wat-c3b091232e974f98aeceb495d2a9f916 --cutoffDate 2024-01-01 --cutoffTz America/New_York --batchSize 500 --generateSweepstakesEntriesReport"
+      // trivia import
+      //"commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex 0 --maxEnrollments 0 --triviaImportFilePath \"C:\\tmp\\trivia_import_20240424.json\""
+
+      // Import member data with tab delimited format 
+      //"commandLineArgs": "--tenantCode ten-87cfa20e9d7140ec9294ae3342d79db0 --startIndex  0 --maxEnrollments 10 --memberImportFilePath \"C:\\tmp\\etl_member_import.txt\"  --enableMemberImport"
+
+      // Soft delete expired consumer tasks which are in pending state
+      //"commandLineArgs": "--processRecurringTasks"
+
+      // Set entries (secondary) wallet balance=0.0 for all consumers of a given tenant
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex  0 --maxEnrollments 10 --clearWalletEntries"
+
+      // Command to redeem the entire balance from consumer wallets into the Health Savings Account (HSA) redemption wallet.
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --redeemConsumerListFilePath \"C:\\tmp\\hsa_xfer_20240626.txt\" --localDownloadFolderPath \"C:\\tmp\" --redeemHSA"
+
+      // Command to generate wallet balances report CSV file for a given wallet type
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --walletTypeCode wat-c3b091232e974f98aeceb495d2a9f916 --batchSize 500 --generateWalletBalancesReport"
+      // task import
+      // "commandLineArgs": "--tenantCode ten-1c9299089e804d3ca8ce4092037c7c68 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\Integ_Demo_SunnyActionCatalog_2024-03-14.txt\""
+      //"commandLineArgs": "--tenantCode ten-7fa9896745474d2f9f71bdad6ca76111 --startIndex 0 --maxEnrollments 0 --taskImportFilePath \"C:\\tmp\\Apr2024_ListofActions_SunnyTeam.txt\""
+
+
+      // consume retail-prod-sync queue
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --processRetailProductSyncQueue"
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --processRetailProductSyncQueue --batchOperationGroupCode bgc-262e7e2a84504b7b857e82914e8b19e6 --batchActionType All",
+
+      // generate card-create file:
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisCreateCards  --localDownloadFolderPath \"C:\\tmp\" --batchOperationGroupCode 78e7f229c45044958eb93b59f7604fbd --batchActionType Generate --batchActionOptions all",
+
+      // consume health-metric queue
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --consumeHealthQueue"
+
+      // process benefits funding 
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskId 1 --year 2024 --month 03 --executeBenefitsFunding"
+      // consume health-metric queue
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --consumeHealthQueue",
+
+      // process benefits funding 
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --executeBenefitsFunding"
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0  --executeBenefitsFunding --consumerListFile consumer_list_ten-ecada21e57154928a2bb959e8365b8b4_102920240640.txt"
+      //"commandLineArgs": "--tenantCode ten-b4e920d3f6f74496ab533d1a9a8ef9e4 --startIndex 0 --maxEnrollments 0  --executeBenefitsFunding --consumerListFile \"C:\\tmp\\Consumer\\consumer_list_ten-ecada21e57154928a2bb959e8365b8b4_102420240640.txt\""
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --jobHistoryId DEFAULT  --PROCESS_DEPOSIT_INSTRUCTIONS_FILE --consumerListFile \"C:\\tmp\\Consumer\\consumer_list_ten-ecada21e57154928a2bb959e8365b8b4_102420240640.txt\"",
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --jobHistoryId DEFAULT --enableS3 --scanS3FileTypes PROCESS_DEPOSIT_INSTRUCTIONS_FILE --isSubmitCard60Job"
+
+
+      // generate card-load file:
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --generateCardLoad  --localDownloadFolderPath \"C:\\tmp\" --batchOperationGroupCode brc-78e7f229c45044958eb93b59f7604fbd --batchActionType All --batchActionOptions all",
+
+      //FIS 30 record file load
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisRecordFileName \"testcard30 3.txt.pgp\" --fis30RecordFileLoad"
+      //FIS 60 record file load
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisRecordFileName \"8733430920202402.load.log\" --fis60RecordFileLoad"
+
+      //import monetary transactions file
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisMonetaryTransactionsFileName \"STDMON03102024_Sunny_Benefits_Inc.txt\" --processMonetaryTransactionsBatchFile"
+
+      // process health task
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --taskId 103 --rollupPeriodTypeName MONTH --year 2024 --month 01 --processHealthTask"
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisMonetaryTransactionsFileName \"STDMON03102024_Sunny_Benefits_Inc.txt\" --processMonetaryTransactionsBatchFile"
+
+      //import monetary transactions file
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --fisMonetaryTransactionsFileName \"STDMON03102024_Sunny_Benefits_Inc.txt\" --processMonetaryTransactionsBatchFile"
+
+      // Perform External Txn Sync:
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --startIndex 0 --maxEnrollments 0 --PerformExternalTxnSync"
+
+      // process health task
+      //"commandLineArgs": "--tenantCode ALL --rollupPeriodTypeName MONTH --year 2025 --month 04 --processHealthTask",
+
+      //execute cohorting
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --batchSize 500 --executeCohorting"
+
+      // Import member data with tab delimited format 
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --customerCode cus-04c211b4339348509eaa870cdea59600 --customerLabel United --memberImportFilePath \"C:\\tmp\\etl_member_import_file-20sept2024-1206PM.txt\" --batchSize 500 --enableMemberImport"
+
+      //Import Consumer Non Monetary Transactions
+      // "commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --consumerNonMonetaryTransactions --consumerNonMonetaryTransactionsFileName Non_Monetary_Transactions.txt.zip"
+
+      // IEncryptAndCopy
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --encryptAndCopy --fileName 8733430506202402issuance.txt --batchOperationGroupCode brc-78e7f229c45044958eb93b59f7604fbd"
+
+      // CreateDuplicateConsumer
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --CreateDuplicateConsumer --newEmail Randomtestmail@yopmail.com --consumerCode cmr-6c51c937949c46b5b61746592a16a0d8"
+
+      // Generate Sweepstakes Entries Report
+      //"commandLineArgs": "--format realtime-media --sweepstakesInstanceId 2 --walletTypeCode wat-c3b091232e974f98aeceb495d2a9f916 --cutoffDate 2024-01-01 --cutoffTz America/New_York --batchSize 500 --generateSweepstakesEntriesReport"
+
+      // Consume Realtime media file 
+      //"commandLineArgs": "--sweepstakesInstanceId 27 --format realtime-media --consumeSweepstakesWinnerReport"
+
+      // Import Cohort Consumers 
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --jobHistoryId DEFAULT --enableS3 --scanS3FileTypes COHORTCONSUMER"
+
+
+      //execute Restore Costco messages Backup from DynamoDB
+      //"commandLineArgs": "--tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --batchSize 500 --minEpochTs 1729927162 --maxEpochTs 1730754083 --executeRestoreCostcoBackup"
+
+      // Import Tasks form S3
+      //"commandLineArgs": "--jobHistoryId DEFAULT --tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --enableS3 --scanS3FileTypes TASK_IMPORT"
+
+      // Sync Master and Consumer wallets
+      //"commandLineArgs": "--jobHistoryId DEFAULT --tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --syncTenantConfig WALLET --consumerCodes cmr-cc8f91deac424fdaa162ebbb055d4fa0,cmr-a3f6b2fa74b44f499369a957a114f92e"
+      //"commandLineArgs": "--jobHistoryId DEFAULT --tenantCode ten-353ae621abde4e22be409325a1dd0eab --syncTenantConfig WALLET,CONSUMER_ACCOUNT_CONFIG  --consumerCodes ALL"
+
+
+      // Process notification rules 
+      // "commandLineArgs": "--processNotificationRules --jobHistoryId DEFAULT --tenantCode All"
+
+      //Process Completed completed task
+      //"commandLineArgs": "--extractCompletedConsumerTask --jobHistoryId DEFAULT --tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --taskId 98 --startDate 13-01-2024 --endDate 05-05-2025"
+
+      //Process file encryption or decryption
+      //"commandLineArgs": "--fileCryptoProcessor --customerCode cus-04c211b4339348509eaa870cdea59600 --jobHistoryId DEFAULT --incomingBucketName helios-dev-customer-1 --incomingFilePath TestDecrypt/FIS/Test2 --actionName DECRYPT --outboundBucketName helios-dev-customer-1 --outboundFilePath TestDecrypt/FIS/Outbound --outboundFileNamePattern {input_filename}__{customer_code}__{uuid}__{mmddyyyy}.txt --archiveBucketName helios-dev-customer-1 --archiveFilePath TestDecrypt/FIS/Archive"
+
+      // Copy data from AWS Redshift to Postgresql
+      //"commandLineArgs": "--transferRedshiftToPostgres --jobHistoryId DEFAULT --dataType MemberImport --batchSize 5000"
+      //Copy data from AWS Redshift to Postgresql
+      //"commandLineArgs": "--transferRedshiftToPostgres --jobHistoryId DEFAULT --dataType MemberImport --batchSize 5000"
+
+      //Read data from Redshift and writes to SFTP
+      //"commandLineArgs": "--redshiftToSftp --jobHistoryId DEFAULT --tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --tableName outbound.member_import_file_data --columnName create_ts --dateRangeStart 2025-06-13 --dateRangeEnd 2025-07-09 --outboundFileNamePattern export__{table_name}__{yyyyMMdd_HHmmss}.csv --delimiter comma --shouldEncrypt false --archiveBucketName helios-dev-customer-1 --archiveFilePath TestDecrypt/FIS/Archive --enableSftp true --redshiftDatabaseName etl_staging"
+      // "commandLineArgs": "--extractCompletedConsumerTask --jobHistoryId DEFAULT --tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --taskId 98 --startDate 13-01-2024 --endDate 05-05-2025"
+
+      // Copy data from AWS Redshift to Postgresql
+      // "commandLineArgs": "--transferRedshiftToPostgres --jobHistoryId DEFAULT --dataType MemberImport --batchSize 5000"
+
+      // "commandLineArgs": "--extractCompletedConsumerTask --jobHistoryId DEFAULT --tenantCode ten-ecada21e57154928a2bb959e8365b8b4 --taskId 98 --startDate 13-01-2024 --endDate 05-05-2025"
+
+      // Process file encryption or decryption
+      //"commandLineArgs": "--fileCryptoProcessor --customerCode cus-04c211b4339348509eaa870cdea59600 --jobHistoryId DEFAULT --incomingBucketName helios-dev-customer-1 --incomingFilePath TestDecrypt/FIS/Test2 --actionName ENCRYPT --outboundBucketName helios-dev-customer-1 --outboundFilePath TestDecrypt/FIS/Outbound --outboundFileNamePattern {input_filename}__{customer_code}__{uuid}__{mmddyyyy}.txt --archiveBucketName helios-dev-customer-1 --archiveFilePath TestDecrypt/FIS/Archive --shouldAddSourceFileName true --delimiter tab"
+
+      // sweepstakes winner report
+      //"commandLineArgs": "--consumeSweepstakesWinnerReport --format realtime-media --jobHistoryId DEFAULT --sweepstakesInstanceId 177"
+    }
+  }
+}

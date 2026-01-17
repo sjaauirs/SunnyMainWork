@@ -1,0 +1,66 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-api
+  namespace: user-api
+  labels:
+    app: user-api
+spec:
+  selector:
+    app: user-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: user-api-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: user-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api-deployment
+  namespace: user-api
+  labels:
+    app: user-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2 
+    spec:
+      serviceAccountName: usersa
+      nodeSelector:
+        workload: helios-dev
+      containers:
+      - name: user-api
+        image: 375611915274.dkr.ecr.us-east-2.amazonaws.com/helios-dev-user-api:IMAGETAG
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"   
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development

@@ -1,0 +1,1 @@
+ALTER TABLE task.consumer_task ADD COLUMN IF NOT EXISTS auto_enrolled BOOLEAN not null default false;

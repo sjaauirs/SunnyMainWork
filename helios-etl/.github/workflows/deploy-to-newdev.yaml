@@ -1,0 +1,55 @@
+name: Dev Batch Job Workflow
+on:
+  workflow_dispatch:
+  # merge_group:
+  # push:
+  #   branches:
+  #     - release-newdev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      BatchJobRepoName: "helios-dev-helios-batch-job-api-ecr"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_NEW_DEV_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_NEW_DEV_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"  
+            
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Newdev/g" Dockerfile
+          docker build -f Dockerfile -t $ECR_REGISTRY/${{ env.BatchJobRepoName }} --build-arg AK="${{secrets.HELIOS_NEW_DEV_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_NEW_DEV_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }}

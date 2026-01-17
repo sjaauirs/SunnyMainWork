@@ -1,0 +1,88 @@
+name: SonarCloud
+on:
+  merge_group:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: windows-latest
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu' # Alternative distribution options are available.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+          nuget-version: 'latest'
+
+      - name: Configure CodeArtifact NuGet source
+        shell: powershell
+        run: |
+          dotnet tool install -g AWS.CodeArtifact.NuGet.CredentialProvider --version 1.0.1
+          dotnet codeartifact-creds install          
+          $CODEARTIFACT_AUTH_TOKEN= (aws codeartifact get-authorization-token --domain heliosnugetrepo --domain-owner 375611915274 --query authorizationToken --output text | Out-String).Trim()
+          aws codeartifact login --tool dotnet --repository helios-common-lib --domain heliosnugetrepo --domain-owner 375611915274
+          dotnet nuget update source heliosnugetrepo -s "https://heliosnugetrepo-375611915274.d.codeartifact.us-east-2.amazonaws.com/nuget/helios-common-lib/v3/index.json"  -u "aws" -p "${CODEARTIFACT_AUTH_TOKEN}" --store-password-in-clear-text --configfile "nuget.config"
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v3
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
+      - name: Install dotnet-coverage
+        shell: powershell
+        run: |
+          dotnet tool install --global dotnet-coverage --version 17.7.3
+
+      - name: 'Restore packages'
+        run: dotnet restore ${{ env.PROJECT_PATH }} --interactive
+
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"SunnyRewards_helios-wallet-api" /o:"sunnyrewards" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet build --no-incremental "helios-wallet-api.sln"
+          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

@@ -1,0 +1,52 @@
+name: DEV01 ETL Job Workflow
+on:
+  workflow_dispatch:
+  push:
+    branches:
+        - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      Dev01Repo: "helios-dev01-batch-job-repo-ecr"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Install dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: "latest"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Dev01/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.Dev01Repo }}:$GITHUB_RUN_ID \
+            --build-arg AK="${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}" \
+            --build-arg SK="${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}" \
+            .
+          docker push $ECR_REGISTRY/${{ env.Dev01Repo }}:$GITHUB_RUN_ID

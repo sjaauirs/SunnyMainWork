@@ -1,0 +1,122 @@
+﻿using SunnyRewards.Helios.ETL.Common.Domain.Config;
+using SunnyRewards.Helios.ETL.Common.Domain.Enum;
+using SunnyRewards.Helios.ETL.Core.Domain.Constants.FIS;
+
+namespace SunnyRewards.Helios.ETL.Core.Domain.Dtos.FIS
+{
+    public class FISMonetoryDetailDto
+    {
+        public char RecordType { get; set; }
+        public long IssuerClientID { get; set; }
+        public string ClientName { get; set; }
+        public long SubProgramID { get; set; }
+        public string SubProgramName { get; set; }
+        public long BIN { get; set; }
+        public string BINCurrencyAlpha { get; set; }
+        public string BINCurrencyCode { get; set; }
+        public string BankName { get; set; }
+        public string PAN { get; set; }
+        public string CardNumber { get; set; }
+        public decimal AuthorizationAmount { get; set; }
+        public string AuthorizationCode { get; set; }
+        public decimal TxnLocalAmount { get; set; }
+        public DateTime TxnLocDateTime { get; set; }
+        public long TxnSign { get; set; }
+        public long TransactionCurrencyCode { get; set; }
+        public string TransactionCurrencyAlpha { get; set; }
+        public long TxnTypeCode { get; set; }
+        public long ReasonCode { get; set; }
+        public long DerivedRequestCode { get; set; }
+        public long ResponseCode { get; set; }
+        public long? MatchStatusCode { get; set; }
+        public long? MatchTypeCode { get; set; }
+        public DateTime InitialLoadDateFlag { get; set; }
+        public long? MCC { get; set; }
+        public string? MerchantCurrencyAlpha { get; set; }
+        public string? MerchantCurrencyCode { get; set; }
+        public string MerchantName { get; set; }
+        public string? MerchantNumber { get; set; }
+        public string? ReferenceNumber { get; set; }
+        public long? PaymentMethodID { get; set; }
+        public decimal SettleAmount { get; set; }
+        public DateTime WCSUTCPostDate { get; set; }
+        public long SourceCode { get; set; }
+        public string? AcquirerReferenceNumber { get; set; }
+        public long? AcquirerID { get; set; }
+        public char? AddressVerificationResponse { get; set; }
+        public decimal? AdjustAmount { get; set; }
+        public string? AuthorizationResponse { get; set; }
+        public string? AVSInformation { get; set; }
+        public decimal? Denomination { get; set; }
+        public string? DirectAccessNumber { get; set; }
+        public string? CardNumberProxy { get; set; }
+        public decimal? FudgeAmt { get; set; }
+        public string? MatchStatusDescription { get; set; }
+        public string? MatchTypeDescription { get; set; }
+        public string? MCCDescription { get; set; }
+        public string? MerchantZip { get; set; }
+        public string? MerchantCity { get; set; }
+        public string? MerchantCountryCode { get; set; }
+        public string? MerchantCountryName { get; set; }
+        public string? MerchantProvince { get; set; }
+        public string? MerchantState { get; set; }
+        public string? MerchantStreet { get; set; }
+        public long? PIN { get; set; }
+        public string? POSData { get; set; }
+        public long? POSEntryCode { get; set; }
+        public string? POSEntryDescription { get; set; }
+        public long? PurseNo { get; set; }
+        public string? ReasonCodeDescription { get; set; }
+        public string? DerivedRequestCodeDescription { get; set; }
+        public string? ResponseDescription { get; set; }
+        public string? Retrievalrefno { get; set; }
+        public long? Reversed { get; set; }
+        public string? SourceDescription { get; set; }
+        public string? TerminalNumber { get; set; }
+        public string? TxnTypeName { get; set; }
+        public string? UserID { get; set; }
+        public string? UserFirstName { get; set; }
+        public string? UserLastName { get; set; }
+        public DateTime? WCSLocalPostDate { get; set; }
+        public string? Comment { get; set; }
+        public string? ClientReferenceNumber { get; set; }
+        public string? ClientSpecificID { get; set; }
+        public long? ActualRequestCode { get; set; }
+        public string? ActualRequestCodeDescription { get; set; }
+        public string? CardholderClientUniqueID { get; set; }
+        public string? PANProxyNumber { get; set; }
+        public string? TxnUID { get; set; }
+        public string? PurseName { get; set; }
+        public string? PurseStatus { get; set; }
+        public DateTime? PurseCreationDate { get; set; }
+        public DateTime? PurseEffectiveDate { get; set; }
+        public DateTime? PurseExpirationDate { get; set; }
+        public DateTime? PurseStatusDate { get; set; }
+        public string? AssociationSource { get; set; }
+        public long? ReasonID { get; set; }
+        public string? ReasonDescription { get; set; }
+        public decimal? Variance { get; set; }
+        public string? ProcessCode { get; set; }
+        public string? TokenUniqueReferenceID { get; set; }
+        public string? PANUniqueReferenceID { get; set; }
+        public string? TokenTransactionID { get; set; }
+        public char? TokenStatus { get; set; }
+        public string? TokenStatusDescription { get; set; }
+        public string? NetworkReferenceID { get; set; }
+        public string? MultiClearingIndication { get; set; }
+        public decimal? AuthorizationBalance { get; set; }
+        public decimal? SettleBalance { get; set; }
+        public DateTime? WCSLocalInserted { get; set; }
+        public DateTime? WCSUTCInserted { get; set; }
+        public DateTime? WCSUTCUpdated { get; set; }
+        public decimal? DiscountAmount { get; set; }
+        public DateTime? ACHEffectiveDate { get; set; }
+        public long? CardPresent { get; set; }
+        public string? DeviceType { get; set; }
+        public string? SpendCategory { get; set; }
+        public string? FilterType { get; set; }
+        public string? PaymentAccountReference { get; set; }
+        public string? OriginalMerchantNumber { get; set; }
+    }
+
+}

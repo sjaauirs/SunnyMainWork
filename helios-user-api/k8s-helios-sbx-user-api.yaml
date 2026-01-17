@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: user-api-sa
+  namespace: helios-sbx
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::768763313030:role/helios-sbx-user-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-api
+  namespace: helios-sbx
+  labels:
+    app: user-api
+spec:
+  selector:
+    app: user-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api-deployment
+  namespace: helios-sbx
+  labels:
+    app: user-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: user-api-sa
+      containers:
+      - name: user-api
+        image: 768763313030.dkr.ecr.us-east-2.amazonaws.com/helios-sbx-user-api-ecr:IMAGETAG
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Sbx

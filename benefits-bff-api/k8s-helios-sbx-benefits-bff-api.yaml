@@ -1,0 +1,101 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: benefits-bff-api-sa
+  namespace: helios-sbx
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::768763313030:role/helios-sbx-benefits-bff-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: benefits-bff-api
+  namespace: helios-sbx
+  labels:
+    app: benefits-bff-api
+spec:
+  selector:
+    app: benefits-bff-api
+  ports:
+    - name: https
+      port: 443
+      targetPort: 5001
+    - name: http
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benefits-bff-api-deployment
+  namespace: helios-sbx
+  labels:
+    app: benefits-bff-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: benefits-bff-api
+  template:
+    metadata:
+      labels:
+        app: benefits-bff-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: benefits-bff-api-sa
+      containers:
+        - name: benefits-bff-api
+          image: 768763313030.dkr.ecr.us-east-2.amazonaws.com/helios-sbx-benefits-bff-api-ecr:IMAGETAG
+          ports:
+            - containerPort: 5001
+          resources:
+            requests:
+              memory: "0.5Gi"
+              cpu: "0.5"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Sbx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:768763313030:certificate/e179b4e9-87cb-48dc-9ce2-cb96adfc15cb
+    alb.ingress.kubernetes.io/load-balancer-name: helios-sbx-benefits-bff-lb
+    alb.ingress.kubernetes.io/subnets: subnet-0328a01fcf81d6a40,subnet-036989346e6dd915a,subnet-0dfe7fdf466053f27
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: benefits-bff-api
+  name: benefits-bff-api-ingress
+  namespace: helios-sbx
+spec:
+  tls:
+    - hosts:
+        - benefits-api.sbx.sunnyrewards.com
+      secretName: helios-sbx-origin-cert
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: benefits-bff-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific

@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.Task.Api", "src\API\SunnyRewards.Helios.Task.Api.csproj", "{575CA63D-282E-466E-B6AD-2C64A0201A04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.Task.Core", "src\Core\SunnyRewards.Helios.Task.Core.csproj", "{A7EA745F-7906-473E-B04A-583AD4F5A44C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.Task.Infrastructure", "src\Infrastructure\SunnyRewards.Helios.Task.Infrastructure.csproj", "{CA3BAE8D-3E9E-416B-BB13-3EEE2EA31CB9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunnyRewards.Helios.Task.UnitTest", "test\UnitTest\SunnyRewards.Helios.Task.UnitTest.csproj", "{89EF443B-1EF9-418E-84AF-1C4FB1D976FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{575CA63D-282E-466E-B6AD-2C64A0201A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{575CA63D-282E-466E-B6AD-2C64A0201A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{575CA63D-282E-466E-B6AD-2C64A0201A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{575CA63D-282E-466E-B6AD-2C64A0201A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7EA745F-7906-473E-B04A-583AD4F5A44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7EA745F-7906-473E-B04A-583AD4F5A44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7EA745F-7906-473E-B04A-583AD4F5A44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7EA745F-7906-473E-B04A-583AD4F5A44C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA3BAE8D-3E9E-416B-BB13-3EEE2EA31CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA3BAE8D-3E9E-416B-BB13-3EEE2EA31CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA3BAE8D-3E9E-416B-BB13-3EEE2EA31CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA3BAE8D-3E9E-416B-BB13-3EEE2EA31CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89EF443B-1EF9-418E-84AF-1C4FB1D976FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89EF443B-1EF9-418E-84AF-1C4FB1D976FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89EF443B-1EF9-418E-84AF-1C4FB1D976FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89EF443B-1EF9-418E-84AF-1C4FB1D976FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7EDFE54F-0825-4663-8560-C7D977CBF2D0}
+	EndGlobalSection
+EndGlobal

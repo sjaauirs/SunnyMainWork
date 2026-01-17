@@ -1,0 +1,2 @@
+ALTER TABLE wallet.consumer_wallet
+ADD COLUMN IF NOT EXISTS total_earned NUMERIC(14,2) NOT NULL DEFAULT 0.0;

@@ -1,0 +1,171 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: benefits-bff-api
+  namespace: helios-prod
+spec:
+  selector:
+    app: benefits-bff-api
+     
+  ports:
+    - name: https
+      port: 443
+      targetPort: 5001
+    - name: http
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: benefits-bff-api-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: benefits-bff-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benefits-bff-api-deployment
+  namespace: helios-prod
+  labels:
+    app: benefits-bff-api
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: benefits-bff-api
+  template:
+    metadata:
+      labels:
+        app: benefits-bff-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: heliossa
+      containers:
+      - name: benefits-bff-api
+        image: 759215193824.dkr.ecr.us-east-2.amazonaws.com/benefits-bff-api:IMAGETAG
+        ports:
+          - name: http
+            containerPort: 5001
+            protocol: TCP
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "4"
+          limits:
+            memory: "16Gi"
+            cpu: "8"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/load-balancer-name: helios-benefits-bff-lb
+    alb.ingress.kubernetes.io/subnets: subnet-08fff04359a50a66b,subnet-044f063f140566c92,subnet-0184af8c128d6e157
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:759215193824:certificate/e8878c67-a3e1-432a-b6fb-97d6eabfb50a
+    # Define the path and port for the health check
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: benefits-bff-api
+  name: benefits-bff-api-ingress
+  namespace: helios-prod
+spec:
+  tls:
+    - hosts:
+        - benefits-api.sunnyrewards.com
+      secretName: sunnyrewardsstarcert
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: benefits-bff-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific     
+---        
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: benefits-bff-api-prod-scaling-hpa
+  namespace: helios-prod   
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: benefits-bff-api-deployment
+  minReplicas: 4
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
+---            
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scale-job-benefits-bff-prod-service-account
+  namespace: helios-prod
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scale-job-benefits-bff-prod-role
+  namespace: helios-prod
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]  
+- apiGroups: ["apps"]
+  resources: ["deployments/scale"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+- apiGroups: ["batch"]
+  resources: ["cronjobs"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scale-job-benefits-bff-prod-role-binding
+  namespace: helios-prod
+subjects:
+- kind: ServiceAccount
+  name: scale-job-benefits-bff-prod-service-account
+  namespace: helios-prod
+roleRef:
+  kind: Role
+  name: scale-job-benefits-bff-prod-role
+  apiGroup: rbac.authorization.k8s.io

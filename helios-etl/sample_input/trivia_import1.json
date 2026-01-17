@@ -1,0 +1,69 @@
+{
+  "trivia": {
+    "triviaTaskExternalCode": "play_mont_triv",
+    "ctaTaskExternalCode": "make_a_budg",
+    "config": {
+      "ux": {
+        "questionIcon": {
+          "url": "",
+          "bgColor": "#111111",
+          "fgColor": "#FFFFFF"
+        },
+        "backgroundUrl": "",
+        "wrongAnswerIcon": {
+          "url": "",
+          "bgColor": "#FF0000",
+          "fgColor": "#FFFFFF"
+        },
+        "correctAnswerIcon": {
+          "url": "",
+          "bgColor": "#111111",
+          "fgColor": "#FFFFFF"
+        }
+      }
+    }
+  },
+  "triviaQuestions": [
+    {
+      "questionExternalCode": "what_does_your_cred_scor_impa",
+      "answerText": [
+        "Loan terms",
+        "Your marriage",
+        "Golf handicap"
+      ],
+      "answerType": "SINGLE",
+      "layoutType": "BUTTON",
+      "questionText": "What does your credit score impact?",
+      "correctAnswer": [
+        0
+      ]
+    },
+    {
+      "questionExternalCode": "how_many_mont_of_livi_expe_do_you_need_in",
+      "answerText": [
+        "1-3 months",
+        "3-6 months",
+        "6-9 months"
+      ],
+      "answerType": "SINGLE",
+      "layoutType": "BUTTON",
+      "questionText": "How many months of living expenses do you need in an emergeny fund?",
+      "correctAnswer": [
+        1
+      ]
+    },
+    {
+      "questionExternalCode": "is_plut_a_plan",
+      "answerText": [
+        "Yes",
+        "No"
+      ],
+      "answerType": "SINGLE",
+      "layoutType": "BUTTON",
+      "questionText": "Is Pluto a planet?",
+      "correctAnswer": [
+        1
+      ]
+    }
+  ]
+}

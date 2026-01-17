@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS etl.redshift_sync_status;

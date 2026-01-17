@@ -1,0 +1,273 @@
+name: Qa Batch Job Workflow
+on:
+  workflow_dispatch:
+  merge_group:
+  push:
+    branches:
+      - release/1.2.0
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      JobDefinitionName: "helios-etl-qa"
+      JobQueueName: "helios-etl-qa-queue"
+      BatchJobRepoName: "helios-qa-batch-job-repo"
+      UATRepo: "helios-uat-batch-job-repo"
+      ProdRepo: "helios-batch-job-repo"
+      IntegRepo: "helios-integ-batch-job-repo"
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_QA }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: QA, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_QA_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_QA_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"  
+            
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Qa/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.BatchJobRepoName }} --build-arg AK="${{ secrets.HELIOS_QA_AWS_ACCESS_KEY_ID }}" --build-arg SK="${{ secrets.HELIOS_QA_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }} 
+          # docker tag  $ECR_REGISTRY/${{ env.BatchJobRepoName }} $ECR_REGISTRY/${{ env.BatchJobRepoName }}:$GITHUB_RUN_ID
+          # docker push $ECR_REGISTRY/${{ env.BatchJobRepoName }}:$GITHUB_RUN_ID 
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_QA }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: QA, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+      # - name: Update Image IDs for UAT, Integ & Prod
+      #   run: |
+      #     # RUN_ID=$(gh api -H "Accept: application/vnd.github+json" \
+      #     #     "/repos/SunnyRewards/helios-etl/actions/runs?branch=$Release_Branch&status=success&per_page=50" \
+      #     #     --jq '.workflow_runs | map(select(.path | test(".*qa.*\\.ya?ml"; "i"))) | .[0].id')
+
+      #     VARIABLE_NAMES=(
+      #     UAT_ETL_IMAGEID
+      #     INTEG_ETL_IMAGEID
+      #     ETL_IMAGEID
+      #     )
+
+      #     for var in ${VARIABLE_NAMES[@]}; do
+      #       ORGANIZATION="SunnyRewards"
+      #       echo "Updating organization variable $var with run ID $GITHUB_RUN_ID"
+      #       curl -X PATCH \
+      #         -H "Authorization: token ${{ secrets.GH_PAT_ACTIONS }}" \
+      #         -H "Accept: application/vnd.github+json" \
+      #         -H "Content-Type: application/json" \
+      #         -d "{\"value\":\"$GITHUB_RUN_ID\"}" \
+      #         "https://api.github.com/orgs/$ORGANIZATION/actions/variables/$var"
+      #     done
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      # - name: Configure AWS CLI
+      #   run: aws configure set default.region us-east-2
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr-uat
+      #   uses: aws-actions/amazon-ecr-login@v1 
+          
+      # - name: push Docker image to UAT ECR
+      #   env:
+      #     UAT_ECR_REGISTRY: ${{ steps.login-ecr-uat.outputs.registry }}
+      #   run: |
+      #     docker tag etlqaimage:latest $UAT_ECR_REGISTRY/${{ env.UATRepo }}:latest
+      #     docker push $UAT_ECR_REGISTRY/${{ env.UATRepo }}:latest     
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.HELIOS_INT_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      # - name: Configure AWS CLI
+      #   run: aws configure set default.region us-east-2
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr-integ
+      #   uses: aws-actions/amazon-ecr-login@v1 
+          
+      # - name: push Docker image to Integ ECR
+      #   env:
+      #     INTEG_ECR_REGISTRY: ${{ steps.login-ecr-integ.outputs.registry }}
+      #   run: |
+      #     docker tag etlqaimage:latest $INTEG_ECR_REGISTRY/${{ env.IntegRepo }}:latest
+      #     docker push $INTEG_ECR_REGISTRY/${{ env.IntegRepo }}:latest     
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.HELIOS_PROD_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.HELIOS_PROD_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      # - name: Configure AWS CLI
+      #   run: aws configure set default.region us-east-2
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr-prod
+      #   uses: aws-actions/amazon-ecr-login@v1 
+          
+      # - name: push Docker image to Prod ECR
+      #   env:
+      #     PROD_ECR_REGISTRY: ${{ steps.login-ecr-prod.outputs.registry }}
+      #   run: |
+      #     docker tag etlqaimage:latest $PROD_ECR_REGISTRY/${{ env.ProdRepo }}:latest
+      #     docker push $PROD_ECR_REGISTRY/${{ env.ProdRepo }}:latest   
+      # - name: Update Image IDs for UAT, Integ & Prod
+      #   run: |
+      #     # RUN_ID=$(gh api -H "Accept: application/vnd.github+json" \
+      #     #     "/repos/SunnyRewards/helios-etl/actions/runs?branch=$Release_Branch&status=success&per_page=50" \
+      #     #     --jq '.workflow_runs | map(select(.path | test(".*qa.*\\.ya?ml"; "i"))) | .[0].id')
+
+      #     VARIABLE_NAMES=(
+      #     UAT_ETL_IMAGEID
+      #     INTEG_ETL_IMAGEID
+      #     ETL_IMAGEID
+      #     )
+
+      #     for var in ${VARIABLE_NAMES[@]}; do
+      #       ORGANIZATION="SunnyRewards"
+      #       echo "Updating organization variable $var with run ID $GITHUB_RUN_ID"
+      #       curl -X PATCH \
+      #         -H "Authorization: token ${{ secrets.GH_PAT_ACTIONS }}" \
+      #         -H "Accept: application/vnd.github+json" \
+      #         -H "Content-Type: application/json" \
+      #         -d "{\"value\":\"$GITHUB_RUN_ID\"}" \
+      #         "https://api.github.com/orgs/$ORGANIZATION/actions/variables/$var"
+      #     done
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      # - name: Configure AWS CLI
+      #   run: aws configure set default.region us-east-2
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr-uat
+      #   uses: aws-actions/amazon-ecr-login@v1 
+          
+      # - name: push Docker image to UAT ECR
+      #   env:
+      #     UAT_ECR_REGISTRY: ${{ steps.login-ecr-uat.outputs.registry }}
+      #   run: |
+      #     docker tag etlqaimage:latest $UAT_ECR_REGISTRY/${{ env.UATRepo }}:latest
+      #     docker push $UAT_ECR_REGISTRY/${{ env.UATRepo }}:latest     
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.HELIOS_INT_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      # - name: Configure AWS CLI
+      #   run: aws configure set default.region us-east-2
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr-integ
+      #   uses: aws-actions/amazon-ecr-login@v1 
+          
+      # - name: push Docker image to Integ ECR
+      #   env:
+      #     INTEG_ECR_REGISTRY: ${{ steps.login-ecr-integ.outputs.registry }}
+      #   run: |
+      #     docker tag etlqaimage:latest $INTEG_ECR_REGISTRY/${{ env.IntegRepo }}:latest
+      #     docker push $INTEG_ECR_REGISTRY/${{ env.IntegRepo }}:latest     
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.HELIOS_PROD_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.HELIOS_PROD_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      # - name: Configure AWS CLI
+      #   run: aws configure set default.region us-east-2
+
+      # - name: Login to Amazon ECR
+      #   id: login-ecr-prod
+      #   uses: aws-actions/amazon-ecr-login@v1 
+          
+      # - name: push Docker image to Prod ECR
+      #   env:
+      #     PROD_ECR_REGISTRY: ${{ steps.login-ecr-prod.outputs.registry }}
+      #   run: |
+      #     docker tag etlqaimage:latest $PROD_ECR_REGISTRY/${{ env.ProdRepo }}:latest
+      #     docker push $PROD_ECR_REGISTRY/${{ env.ProdRepo }}:latest   

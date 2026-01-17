@@ -1,0 +1,1 @@
+ALTER TABLE wallet.wallet_type ADD COLUMN IF NOT EXISTS is_external_sync BOOLEAN not null default false;

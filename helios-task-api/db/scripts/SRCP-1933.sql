@@ -1,0 +1,1 @@
+ALTER TABLE task.task_reward ADD COLUMN IF NOT EXISTS self_report BOOLEAN not null default true

@@ -1,0 +1,101 @@
+mem_nbr,mem_lname,mem_fname,mem_mname,mem_dob,deceased_dt,mem_gender,mem_addr1,mem_addr2,mem_addr3,mem_city,mem_state,mem_zip,mem_county,mem_phone,mem_email,mem_ssn,mem_hisp_orig,mem_need_interpreter,race_code_1,race_code_2,race_code_3,hic_number,mbi_number,mrn_number,guard_lname,guard_fname,guard_mname,guard_email,spoken_language_source,written_language_source,other_language_source,spoken_language_id,written_language_id,other_language_id,race_source,ethnicity_source
+220656756,Northleigh,Constantino,O,7/12/1978,,M,1267 Continental Court,,,Odessa,TX,79769,,432-307-4565,cnorthleigh0@latimes.com,171-54-4219,E1.04,Y,R5.01,,,,HQYDV3ZJPC8Y,,,,,,2,1,2,21,26,21,29,24
+063449605,Krzysztofiak,Rube,E,7/12/1971,,F,9 Bunting Point,20th Floor,,Racine,WI,53405,,262-874-7580,rkrzysztofiak1@biglobe.ne.jp,658-27-1882,E1.06,Y,E1.01,,,,AVX2AERGTG4K,,,,,,3,0,1,25,22,24,21,29
+759853516,Weymouth,Stanwood,S,7/12/1974,,M,25494 Caliangt Plaza,Apt 668,,Austin,TX,78764,,512-272-7031,sweymouth2@cocolog-nifty.com,494-65-9685,E1.03,N,E1.02,,,,ITBKL3Z3IIA3,,,,,,3,2,3,26,25,21,22,22
+259424186,Mockett,Levi,G,7/12/1953,,M,93984 Golf Course Center,,,Milwaukee,WI,53205,,920-373-2677,lmockett3@pbs.org,812-30-7408,E1.06,Y,R1,,,,BRX9QYH7HH7E,,,,,,3,3,2,21,24,24,22,28
+374890125,Mashro,Abramo,V,7/12/1991,,F,9630 Vahlen Park,,,Harrisburg,PA,17140,,717-313-7944,amashro4@springer.com,572-47-4719,E1.02,Y,ASKU,,,,R2EK9FWPHC27,,,,,,2,0,2,29,29,21,24,29
+964651612,Bradlaugh,Alexei,C,7/12/1987,,M,17483 Gina Terrace,,,Washington,DC,20078,,202-941-8062,abradlaugh5@mayoclinic.com,212-64-0857,E1.02,N,R5.03,,,,8BH9H69LCI7V,,,,,,1,1,0,24,29,24,30,23
+892284879,Joseph,Maurizio,S,7/12/1962,,F,76067 Forster Street,Suite 29,,Louisville,KY,40280,,502-910-9585,mjoseph6@unblog.fr,723-02-9217,E1.08,N,R2,,,,1T3B4OLUI0TQ,,,,,,1,0,1,25,21,24,29,30
+932556834,Filler,Hillyer,X,7/12/1963,,F,648 Emmet Junction,,,Washington,DC,20442,,202-326-8102,hfiller7@nymag.com,466-75-4840,E1.05,Y,R9,,,,SE7D8FHTGWZA,,,,,,3,1,3,24,22,29,28,28
+453344427,Tinklin,Janek,Q,7/12/1966,,F,200 Alpine Place,20th Floor,,El Paso,TX,79945,,915-735-8854,jtinklin8@ox.ac.uk,651-44-6169,E1.03,Y,OTH,,,,J7C2JYEW7J18,,,,,,2,3,3,25,28,28,29,24
+205296692,Giacopini,Dorey,Q,7/12/1970,,F,81 5th Court,15th Floor,,Houston,TX,77080,,832-138-3633,dgiacopini9@ucoz.com,756-95-5360,E1.02,N,R5,,,,VB1TV47B07R0,,,,,,3,3,3,25,26,29,23,20
+799599008,Chomicz,Isac,D,7/12/1979,,M,9 Moland Hill,Room 1490,,Washington,DC,20005,,202-945-8945,ichomicza@army.mil,331-98-3445,UNK,Y,R5.03,,,,SRHYD9KP9RJT,,,,,,1,1,2,28,25,29,20,29
+268546575,Rawlison,Sutherland,P,7/12/1973,,M,4069 East Circle,,,Lake Charles,LA,70616,,337-901-1324,srawlisonb@istockphoto.com,627-94-5250,E1.02,N,E1.03,,,,7WEK9R5P4QUV,,,,,,3,1,1,22,29,25,28,22
+937520666,Clemas,Kalil,C,7/12/1984,,F,97 Vernon Pass,,,Memphis,TN,38136,,901-767-2022,kclemasc@si.edu,194-17-0281,E1.01,N,E2,,,,1CYDG50QPEI1,,,,,,0,1,0,23,22,22,29,20
+236542495,Potter,Karl,D,7/12/1992,,F,459 Delladonna Street,,,Winston Salem,NC,27110,,336-147-8070,kpotterd@icq.com,111-17-0025,E1.08,N,OTH,,,,JMQOY6O37QTN,,,,,,0,0,1,29,23,28,22,30
+832408197,Yandle,Killie,L,7/12/1985,,M,73102 Charing Cross Place,17th Floor,,West Palm Beach,FL,33421,,561-942-7843,kyandlee@nps.gov,783-35-6179,E1.07,N,R5,,,,K87K29MX0325,,,,,,3,1,3,28,29,25,22,24
+535232007,Schaumann,Winifield,V,7/12/1958,,F,0 Surrey Court,Room 127,,Montgomery,AL,36195,,334-483-6673,wschaumannf@howstuffworks.com,373-84-6443,E1.06,N,R5.02,,,,N5XKHYG8DUFD,,,,,,0,3,0,28,23,24,30,21
+437652158,Ohlsen,Marvin,F,7/12/1985,,M,8 Muir Alley,Suite 60,,Cleveland,OH,44177,,216-444-6831,mohlseng@tinyurl.com,497-55-0567,E1.08,N,OTH,,,,INEVAZ2A7QE7,,,,,,0,2,0,24,23,25,28,28
+211420069,Sherwill,Virgilio,N,7/12/1977,,F,48987 Welch Plaza,,,Kansas City,KS,66160,,913-162-6946,vsherwillh@washington.edu,107-40-6338,E1.03,N,R1,,,,ZSM6GPORNZXU,,,,,,2,0,0,28,25,26,28,20
+014299465,Worg,Frannie,G,7/12/1979,,F,274 Northland Pass,PO Box 78272,,Minneapolis,MN,55458,,612-689-2962,fworgi@google.co.uk,361-58-6346,E1.06,Y,ASKU,,,,L77E0ZX7A64Z,,,,,,0,1,0,28,25,24,30,23
+024312428,Fillary,Birk,V,7/12/1979,,F,6619 Tomscot Crossing,Room 901,,Charlotte,NC,28289,,704-888-2951,bfillaryj@bravesites.com,217-14-8065,E1.05,Y,R5.03,,,,X7BQH4MNIRN4,,,,,,0,3,3,22,23,23,21,21
+229141728,Dawbery,Ruddy,I,7/12/1953,,F,1159 Schiller Avenue,3rd Floor,,Minneapolis,MN,55480,,612-919-8854,rdawberyk@cisco.com,173-27-3177,E1.02,Y,R2,,,,L2OTYAVTUDMP,,,,,,1,1,0,24,28,22,24,30
+982533655,Rooze,Colby,Y,7/12/1958,,M,742 Dottie Park,17th Floor,,Des Moines,IA,50981,,515-768-2061,croozel@networkadvertising.org,744-59-5185,UNK,N,E1.03,,,,VCOSOSJ8OCK4,,,,,,3,3,2,29,22,28,21,21
+046038652,Alesin,Phillip,B,7/12/1973,,M,0 Glacier Hill Crossing,14th Floor,,Houston,TX,77020,,281-519-7933,palesinm@npr.org,592-47-4767,E1.01,N,R5.03,,,,6D7MRTNVJA1A,,,,,,3,3,0,22,24,29,24,29
+233071192,Syncke,Thedrick,R,7/12/1953,,F,64 Sullivan Center,Apt 1405,,Jackson,MS,39236,,601-816-6612,tsyncken@eventbrite.com,823-60-2807,ASKU,N,R3,,,,ULT3IM9343LM,,,,,,1,1,3,21,21,21,29,24
+443481542,Terry,Neill,P,7/12/1961,,F,65 Mendota Pass,,,Chattanooga,TN,37416,,423-982-2809,nterryo@yolasite.com,792-66-7368,E1.07,N,R3,,,,DMX1WV8VH09T,,,,,,2,1,3,29,22,24,22,21
+621055095,Ronci,Bail,Y,7/12/1955,,M,0 Arapahoe Road,Room 1316,,Fort Worth,TX,76162,,682-415-2248,broncip@latimes.com,432-56-7341,E1.03,N,R1,,,,J6CB3V9QSI3S,,,,,,1,0,3,21,26,23,20,22
+749850794,Readshall,Tate,J,7/12/1967,,F,9889 Stone Corner Junction,16th Floor,,Cincinnati,OH,45264,,513-146-0204,treadshallq@flavors.me,243-73-7166,UNK,N,R5,,,,LFV9VUMP3ILT,,,,,,0,2,0,22,26,22,22,23
+992034876,Eaglen,Hervey,X,7/12/1960,,F,02 Hooker Court,,,Saint Paul,MN,55146,,651-130-3995,heaglenr@wisc.edu,336-13-4358,E1.06,N,R4,,,,U0KVI2YNYMPJ,,,,,,0,0,3,22,24,26,29,20
+833011917,Haysham,Maje,J,7/12/1971,,F,30 Cordelia Alley,,,Houston,TX,77050,,281-838-4735,mhayshams@nydailynews.com,144-52-1936,E1.08,N,R9,,,,Q4NL7QLD7X7C,,,,,,2,2,0,22,21,22,23,24
+606317443,Smalles,Garvin,H,7/12/1974,,F,90 American Center,,,El Paso,TX,79923,,915-795-1697,gsmallest@cbslocal.com,137-56-5394,E1.05,N,R2,,,,HSKOC6T1YGJL,,,,,,3,3,0,26,23,22,28,20
+348625591,Townsend,Cordie,F,7/12/1989,,F,2 Nancy Street,,,Detroit,MI,48295,,313-341-0471,ctownsendu@friendfeed.com,574-13-1160,UNK,Y,R5,,,,10HV8J7JQ9JR,,,,,,3,3,0,26,26,28,30,22
+369647363,Jee,Chrotoem,B,7/12/1984,,F,71 Armistice Crossing,,,Boston,MA,02298,,617-370-7301,cjeev@vkontakte.ru,720-20-1492,E1.06,N,E1.03,,,,SFDYF0F2BIPU,,,,,,2,0,0,23,24,22,22,23
+296779287,Haskayne,Walden,Z,7/12/1964,,M,254 Jana Terrace,,,Cincinnati,OH,45264,,513-249-4232,whaskaynew@washingtonpost.com,809-14-8513,E1.04,Y,R5.01,,,,ZPACQK1KSGAW,,,,,,2,2,3,21,29,22,23,22
+061860110,Dukes,Lewiss,K,7/12/1980,,M,0861 Mendota Way,,,Pasadena,CA,91103,,323-557-6324,ldukesx@51.la,485-22-1581,E1.05,N,R5,,,,SZ9B1YNAHLSG,,,,,,2,3,2,21,28,21,24,20
+107160859,Glaserman,Paco,C,7/12/1967,,M,9700 Summit Road,Apt 1475,,Buffalo,NY,14225,,716-479-2361,pglasermany@tinyurl.com,173-78-8789,UNK,Y,R3,,,,Y7AN9TSZLYKK,,,,,,3,3,2,29,25,28,30,30
+465722842,Basley,Emory,R,7/12/1982,,M,40215 Manitowish Street,1st Floor,,Kansas City,MO,64193,,816-349-8051,ebasleyz@cbc.ca,713-99-1275,E1.04,Y,R5,,,,40VHGCO9K1DT,,,,,,2,2,2,26,26,22,30,20
+140937554,Farries,Clayborn,K,7/12/1955,,F,05118 Pierstorff Court,,,Austin,TX,78726,,512-365-3960,cfarries10@mlb.com,230-53-9845,ASKU,N,R5.02,,,,EZY2SSRA5542,,,,,,3,1,0,28,25,21,30,28
+322530104,Gadman,Griff,X,7/12/1992,,F,44 Steensland Drive,,,Des Moines,IA,50335,,515-258-1687,ggadman11@altervista.org,212-98-6365,E1.04,N,ASKU,,,,AKFHVDE49WLU,,,,,,3,1,3,26,24,21,30,22
+411383828,Roglieri,Gardy,H,7/12/1968,,M,8 Killdeer Way,,,Miami,FL,33124,,786-480-1831,groglieri12@techcrunch.com,611-06-0418,E1.01,N,R5.02,,,,FK85N59ZBHLG,,,,,,1,3,3,26,22,29,21,29
+086962080,Catterall,Stearn,V,7/12/1972,,M,3962 Anzinger Terrace,Room 800,,Memphis,TN,38104,,615-262-6922,scatterall13@epa.gov,175-79-6069,ASKU,N,E1.03,,,,5UUCVHAA29B7,,,,,,1,3,1,28,23,25,24,22
+828605748,Mournian,Sean,U,7/12/1970,,M,5325 Brentwood Lane,,,Nashville,TN,37240,,615-531-8479,smournian14@hibu.com,823-12-7756,E1.07,Y,R5.01,,,,FT1JILJ34XXE,,,,,,1,2,2,24,26,22,30,21
+672430510,Korf,Dani,Q,7/12/1972,,M,14 Garrison Road,Apt 76,,Washington,DC,20067,,202-103-1245,dkorf15@github.com,104-27-7509,E1.02,Y,R1,,,,4ZSE4M7UHVHA,,,,,,0,1,1,26,22,29,28,21
+062541541,Orwin,Rik,E,7/12/1986,,M,754 Badeau Park,,,Houston,TX,77276,,713-713-6821,rorwin16@hhs.gov,705-68-1315,E1.04,Y,OTH,,,,4JNPPIYGFMKM,,,,,,0,0,1,28,21,26,24,23
+214583364,Worswick,Steffen,E,7/12/1985,,M,04187 Hooker Circle,Apt 660,,Washington,DC,20205,,202-191-5989,sworswick17@blog.com,547-71-3079,E1.02,N,R9,,,,0Y1V7FBQ6BJN,,,,,,2,0,1,29,22,29,21,22
+168975770,Jacobovitch,Amble,P,7/12/1992,,M,8943 Jenna Avenue,Suite 70,,El Paso,TX,88530,,915-285-6171,ajacobovitch18@nyu.edu,845-35-8194,E1.01,Y,R3,,,,6LMG8SRH38CS,,,,,,3,2,0,29,28,28,23,29
+399247947,Leacy,Jase,T,7/12/1981,,M,21 Butternut Alley,,,New Castle,PA,16107,,724-706-9551,jleacy19@cbc.ca,541-76-9165,E1.02,N,R2,,,,YMTG822AO3UG,,,,,,1,2,2,22,26,29,22,21
+373401983,MacCoveney,Brian,U,7/12/1969,,M,16 Thierer Circle,Suite 8,,Stamford,CT,06922,,203-209-8092,bmaccoveney1a@msn.com,113-36-7715,E1.07,Y,E2,,,,RDZQSNVSKL2D,,,,,,3,1,1,29,24,24,30,23
+084180385,Caustick,Lodovico,B,7/12/1984,,F,61143 Laurel Hill,PO Box 58410,,Midland,MI,48670,,989-918-3172,lcaustick1b@mashable.com,340-26-0685,E1.04,Y,R5.01,,,,4PGFHA96M358,,,,,,3,1,0,23,25,23,29,29
+050251888,Westwood,Boy,M,7/12/1961,,M,1 Crownhardt Junction,Room 1643,,Reno,NV,89510,,775-881-8565,bwestwood1c@spotify.com,763-37-1192,E1.01,N,ASKU,,,,CZY6SKBJEH2R,,,,,,3,1,2,21,25,29,20,23
+107211002,Muggleston,Sydney,L,7/12/1983,,F,934 Bellgrove Park,Room 1791,,Wichita Falls,TX,76305,,940-369-2567,smuggleston1d@nps.gov,246-28-5627,E1.05,Y,E1.03,,,,9BAM2HPW9S0Y,,,,,,3,0,3,28,28,24,23,23
+933101141,Pallas,Quill,R,7/12/1989,,M,89873 Shasta Circle,,,Bakersfield,CA,93386,,661-669-7235,qpallas1e@arizona.edu,455-46-0876,E1.03,N,OTH,,,,6N1CRQZCHN5E,,,,,,3,2,3,28,23,29,23,29
+348660311,Philpots,Silvain,Y,7/12/1991,,F,701 East Street,,,Norwalk,CT,06859,,203-799-7091,sphilpots1f@marketwatch.com,848-71-7821,E1.06,Y,E1.02,,,,81W8IAG6C9IL,,,,,,2,3,1,24,21,22,24,23
+972869989,Tuite,Sumner,U,7/12/1980,,F,7843 Golf View Lane,Room 103,,Newark,NJ,07112,,973-102-1063,stuite1g@scribd.com,211-91-1069,E1.03,N,E1.02,,,,AID0S0GCFSMH,,,,,,0,2,3,24,29,28,21,22
+853819263,Whitehead,Doug,U,7/12/1988,,F,09971 Grasskamp Plaza,,,San Francisco,CA,94121,,858-412-9132,dwhitehead1h@hexun.com,540-77-1035,E1.07,Y,R5.03,,,,XV8VWR9CZ5WY,,,,,,1,1,0,26,21,22,30,24
+451774364,McMaster,Gaby,W,7/12/1963,,F,0160 Burrows Point,,,San Antonio,TX,78205,,210-273-9799,gmcmaster1i@fema.gov,125-73-8180,E1.01,N,R4,,,,TGA3W8TSQ2FB,,,,,,3,0,1,24,23,29,22,28
+272355358,Eirwin,Ransell,K,7/12/1980,,M,3 Porter Way,PO Box 78683,,Juneau,AK,99812,,907-919-4315,reirwin1j@soundcloud.com,873-67-4992,E1.01,N,E2,,,,Q8S2JKDMXXRF,,,,,,1,0,2,28,22,26,30,23
+137643135,Kosiada,Winthrop,M,7/12/1962,,F,7755 Bultman Circle,,,Miami,FL,33180,,305-278-2908,wkosiada1k@ow.ly,719-92-3631,E1.07,Y,E1.03,,,,DNOTUG6XKCOC,,,,,,0,2,1,26,21,28,22,21
+861762657,Perry,Iver,W,7/12/1976,,F,9734 Dryden Street,,,Durham,NC,27705,,434-451-3447,iperry1l@senate.gov,567-05-9855,E1.01,Y,OTH,,,,OT4OMCLRAZ88,,,,,,2,3,1,23,25,29,30,30
+719605937,Arsey,Toiboid,O,7/12/1958,,F,905 Utah Terrace,Apt 1931,,Indianapolis,IN,46226,,317-508-8393,tarsey1m@yellowbook.com,475-52-5881,E1.06,Y,R5.01,,,,0CQE0FSZCUB7,,,,,,2,2,3,24,29,21,21,22
+483714999,Stennes,Osbourne,W,7/12/1986,,M,401 Center Trail,PO Box 6471,,Saint Louis,MO,63169,,314-621-1100,ostennes1n@baidu.com,692-93-0839,E1.01,Y,R9,,,,7OTYKP8GDFD4,,,,,,1,3,0,26,26,26,21,24
+709537017,Beedie,Howey,Q,7/12/1983,,F,89 Bayside Avenue,,,Washington,DC,20530,,202-465-5252,hbeedie1o@rambler.ru,197-73-7719,E1.03,Y,R4,,,,58QZ27ZU3WQH,,,,,,1,3,0,25,21,28,22,28
+379593894,Briars,Glen,E,7/12/1978,,F,9905 Becker Avenue,PO Box 63447,,Palatine,IL,60078,,847-327-3930,gbriars1p@123-reg.co.uk,546-17-2313,E1.01,N,E2,,,,J2X4ES8IZCSN,,,,,,1,3,0,24,21,28,21,21
+875238384,Sevior,West,P,7/12/1966,,F,4295 Fuller Way,Apt 1436,,Bronx,NY,10464,,718-752-5596,wsevior1q@narod.ru,238-31-8683,E1.05,Y,E2,,,,KBQ7ULX9K6TX,,,,,,0,2,2,21,21,28,23,21
+987497115,Jozefczak,Kahaleel,X,7/12/1986,,M,737 Kings Hill,13th Floor,,Lakewood,WA,98498,,253-195-3565,kjozefczak1r@joomla.org,627-76-5504,E1.08,Y,OTH,,,,39X5AMGMSXJQ,,,,,,1,1,3,26,26,22,20,29
+125594253,Van Arsdall,Kylie,E,7/12/1970,,F,12 Sunbrook Point,,,Des Moines,IA,50330,,515-584-1142,kvanarsdall1s@ibm.com,123-67-1024,E1.08,N,R2,,,,YA3W3CXVT2Y3,,,,,,1,2,0,29,22,29,20,21
+255882609,Riba,Simon,I,7/12/1968,,M,8612 Oak Terrace,Apt 1690,,Burbank,CA,91505,,323-162-4262,sriba1t@toplist.cz,804-15-1521,E1.04,N,R5.01,,,,RJVXOK4K93UF,,,,,,3,2,0,29,26,28,29,21
+416769919,Hinz,Elijah,K,7/12/1979,,F,56215 Debs Hill,PO Box 82389,,Las Vegas,NV,89155,,702-509-5885,ehinz1u@reference.com,618-42-5760,E1.07,N,E2,,,,S634WHJ6W0HU,,,,,,1,2,3,23,22,26,29,24
+381046583,Rosenstiel,Elvyn,D,7/12/1980,,M,010 Autumn Leaf Street,,,Philadelphia,PA,19184,,215-250-4763,erosenstiel1v@ucla.edu,634-73-0206,E1.06,N,E2,,,,VYSNZYZ01XX6,,,,,,0,2,1,21,22,26,29,22
+170834024,Morriss,Laird,A,7/12/1976,,M,39847 Redwing Road,,,Arlington,TX,76096,,817-833-3099,lmorriss1w@unc.edu,491-09-7679,E1.01,N,R4,,,,L1FM6K7RM7NH,,,,,,1,0,0,25,29,22,24,29
+238771399,Livoir,Silvain,Q,7/12/1977,,M,013 Surrey Park,,,Saint Louis,MO,63167,,314-320-1366,slivoir1x@ft.com,705-30-3359,E1.01,N,R3,,,,62G3OO55FT25,,,,,,0,2,1,23,29,25,29,29
+954737496,Cuardall,Lovell,Q,7/12/1982,,F,4373 Burrows Circle,Room 1883,,Arlington,VA,22234,,571-840-9833,lcuardall1y@merriam-webster.com,883-87-1243,E1.07,N,R2,,,,S5V01GMEHTCH,,,,,,1,0,3,29,29,28,30,24
+125974025,Vader,Padgett,D,7/12/1991,,F,2 Lyons Point,Room 1080,,Arlington,TX,76096,,817-139-3824,pvader1z@fema.gov,674-58-5425,E1.01,N,R5,,,,NBFY53QOWDFV,,,,,,3,1,3,25,23,25,28,24
+835883320,Wrinch,Rand,Q,7/12/1983,,M,7128 Cardinal Terrace,,,Miami,FL,33261,,305-510-8268,rwrinch20@icq.com,427-97-4860,E1.03,Y,E1.02,,,,3FKA9L4OA59H,,,,,,2,0,1,25,28,25,24,24
+612187182,Hasslocher,Desmond,M,7/12/1989,,F,2196 Shasta Court,,,Salt Lake City,UT,84125,,801-259-0607,dhasslocher21@usda.gov,266-85-7515,E1.02,N,R2,,,,A463EHDDS8FG,,,,,,0,1,2,29,23,23,23,24
+332588743,Droghan,Ahmad,G,7/12/1962,,F,63 Blue Bill Park Crossing,,,Jackson,MS,39296,,601-534-8931,adroghan22@timesonline.co.uk,365-32-5880,E1.03,Y,E1.02,,,,HUNX49ELD3UL,,,,,,0,1,2,23,25,24,21,21
+456583674,Huegett,Alvis,O,7/12/1960,,M,7164 Mallory Road,,,Merrifield,VA,22119,,571-972-1468,ahuegett23@naver.com,837-13-8129,E1.01,N,R4,,,,88QWBZHC90PT,,,,,,2,3,1,29,23,28,28,29
+225929074,Borsi,Stanly,M,7/12/1990,,F,43033 Kim Parkway,,,Boise,ID,83727,,208-283-0464,sborsi24@pcworld.com,636-11-9417,E1.04,Y,R4,,,,KC80GP07JJ69,,,,,,3,0,2,26,21,22,21,24
+225848839,Seeger,Lucian,K,7/12/1986,,M,7184 Pankratz Plaza,,,Richmond,VA,23277,,804-547-0018,lseeger25@is.gd,834-67-0337,E1.04,Y,E1.03,,,,9LVQQSI8R7BQ,,,,,,2,0,2,23,21,25,20,22
+699058391,Cocher,Philip,K,7/12/1961,,M,62 Victoria Lane,Room 1076,,Boca Raton,FL,33499,,561-525-4738,pcocher26@pagesperso-orange.fr,867-78-3602,E1.03,Y,E1.02,,,,LG7K6D1RDIGH,,,,,,0,0,1,29,26,28,23,24
+137461322,Beetham,Udall,Y,7/12/1991,,F,17147 Prairie Rose Trail,Suite 20,,Wichita Falls,TX,76305,,940-690-5616,ubeetham27@newsvine.com,339-19-3188,E1.02,Y,R4,,,,I1XZUPNYHYHJ,,,,,,3,0,3,21,28,24,29,21
+030615636,Selborne,Seymour,M,7/12/1975,,F,98439 Fulton Hill,,,Sacramento,CA,94291,,916-676-8968,sselborne28@mapquest.com,225-44-3664,E1.02,Y,ASKU,,,,DPZGTK69KJO5,,,,,,3,1,1,24,23,25,23,24
+049970493,Spacy,Gerome,K,7/12/1979,,F,827 Washington Lane,Room 886,,Indianapolis,IN,46231,,317-709-9238,gspacy29@senate.gov,470-90-3744,E1.05,Y,R3,,,,MGIXWDP5L0YW,,,,,,3,2,3,26,23,28,21,29
+697767950,O'Cridigan,Bernhard,E,7/12/1978,,F,21 Sherman Way,,,Springfield,MO,65805,,417-350-2503,bocridigan2a@ameblo.jp,434-86-0078,E1.01,Y,E1.01,,,,6YUX2FO1RSL6,,,,,,3,2,3,22,26,26,21,30
+905027316,Kener,Adolphe,Y,7/12/1985,,F,28619 Heath Hill,,,Fort Pierce,FL,34949,,772-554-3033,akener2b@dot.gov,707-57-3182,ASKU,N,R9,,,,O1XP3FBXAGDH,,,,,,0,3,2,29,28,21,30,20
+622791088,Paulich,Ximenez,K,7/12/1990,,M,79613 Waxwing Hill,Room 1225,,Spartanburg,SC,29319,,864-675-0251,xpaulich2c@mit.edu,218-12-1028,E1.02,Y,ASKU,,,,ZL1X0VU2YBM3,,,,,,3,1,0,23,21,23,21,24
+146442999,Grent,Scotti,H,7/12/1962,,M,422 Forest Point,,,Saint Paul,MN,55108,,612-441-3192,sgrent2d@hatena.ne.jp,137-66-7896,E1.07,N,E1.01,,,,QD02ZSE699JF,,,,,,3,0,3,24,24,29,22,29
+682382435,Menilove,Reggie,I,7/12/1967,,M,55663 Crowley Road,3rd Floor,,Houston,TX,77223,,713-913-1776,rmenilove2e@buzzfeed.com,222-93-2718,E1.05,N,E1.02,,,,34YZPKLVAFNS,,,,,,2,0,0,29,28,22,20,22
+626222909,Mabone,Gabi,P,7/12/1981,,M,26 Orin Circle,Suite 90,,Corpus Christi,TX,78465,,361-197-1831,gmabone2f@gravatar.com,540-17-8723,E1.01,N,E1.03,,,,MGLRKQLQDZCO,,,,,,3,1,0,21,28,24,20,20
+806659321,Charlotte,Pinchas,N,7/12/1954,,M,73276 Troy Point,Apt 1295,,Bloomington,IL,61709,,309-233-8842,pcharlotte2g@dion.ne.jp,481-30-9644,E1.05,Y,R1,,,,KLZGHZH74EQY,,,,,,1,0,1,22,24,21,29,22
+290656053,Banasik,Zerk,Y,7/12/1963,,F,9 Twin Pines Pass,,,Panama City,FL,32405,,850-167-9412,zbanasik2h@reddit.com,629-54-0181,E1.02,Y,R3,,,,ZDDPCZ8BTZ9W,,,,,,2,1,2,21,21,24,21,21
+855934885,Castelluzzi,Alexandro,X,7/12/1987,,F,2828 Bashford Alley,,,Shreveport,LA,71151,,318-336-8199,acastelluzzi2i@diigo.com,364-10-0812,E1.04,Y,ASKU,,,,GN5XL7T66KGX,,,,,,3,3,0,26,29,29,23,29
+109165214,Mewhirter,Murvyn,X,7/12/1984,,M,0784 Lighthouse Bay Avenue,PO Box 26708,,Buffalo,NY,14269,,716-547-5453,mmewhirter2j@scribd.com,552-73-7086,E1.02,Y,ASKU,,,,2HFJ478NT6X0,,,,,,2,3,0,26,21,21,22,24
+744854785,Aykroyd,Kirk,M,7/12/1956,,F,82 Homewood Court,,,New Orleans,LA,70149,,504-854-6419,kaykroyd2k@twitpic.com,766-69-2259,E1.01,N,R5,,,,EN0G0NTIQRLM,,,,,,2,1,3,22,22,22,21,22
+946966751,Steptow,Burnard,G,7/12/1991,,F,8414 Hoard Parkway,Room 273,,Bryan,TX,77806,,979-919-4940,bsteptow2l@php.net,528-88-6947,E1.07,N,R4,,,,LFBHO3KCWKPO,,,,,,2,0,2,22,24,26,20,24
+018507885,Borleace,Ricoriki,R,7/12/1977,,M,838 Ryan Trail,,,Shawnee Mission,KS,66276,,913-139-5924,rborleace2m@umich.edu,898-41-1704,E1.06,Y,R2,,,,CQTMVMCCO21B,,,,,,1,0,3,29,25,29,24,30
+872812620,Lett,Gayle,V,7/12/1984,,F,55645 3rd Junction,10th Floor,,Fresno,CA,93721,,559-433-3662,glett2n@arizona.edu,530-64-3498,E1.08,Y,R1,,,,BCK4O3OD8D0L,,,,,,2,0,1,21,24,22,28,28
+469791746,O'Neal,Hobie,P,7/12/1991,,M,2287 Hollow Ridge Pass,Suite 72,,Jacksonville,FL,32204,,904-823-8471,honeal2o@barnesandnoble.com,174-52-9490,E1.07,Y,R5,,,,J6AGD1YK3RQA,,,,,,1,3,3,21,21,21,28,30
+813191656,Kinsella,Dimitry,Y,7/12/1955,,F,60262 Karstens Crossing,,,Newark,DE,19714,,302-884-6892,dkinsella2p@mashable.com,478-57-7458,E1.01,N,R5.02,,,,1HNIIQ2KMFLN,,,,,,0,0,3,21,26,23,30,21
+561414698,Giottoi,Frederic,F,7/12/1962,,F,7731 Straubel Place,PO Box 25394,,Flushing,NY,11388,,718-468-5427,fgiottoi2q@ocn.ne.jp,789-56-6518,E1.07,Y,R2,,,,DOIX85G4MJVZ,,,,,,1,0,3,21,25,23,21,30
+440947982,Stockman,Rockey,F,7/12/1969,,M,0 Erie Place,,,Pomona,CA,91797,,909-243-0541,rstockman2r@loc.gov,390-25-5073,E1.05,Y,E1.03,,,,PTQ75W6BRTZN,,,,,,0,1,1,25,28,22,29,22

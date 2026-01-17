@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tenant-api-sa
+  namespace: helios-dev01
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::375611915274:role/helios-dev01-tenant-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tenant-api
+  namespace: helios-dev01
+  labels:
+    app: tenant-api
+spec:
+  selector:
+    app: tenant-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenant-api-deployment
+  namespace: helios-dev01
+  labels:
+    app: tenant-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tenant-api
+  template:
+    metadata:
+      labels:
+        app: tenant-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2  
+    spec:
+      serviceAccountName: tenant-api-sa
+      containers:
+      - name: tenant-api
+        image: 375611915274.dkr.ecr.us-east-2.amazonaws.com/helios-dev01-tenant-api-ecr:IMAGETAG
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Dev01

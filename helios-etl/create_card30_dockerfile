@@ -1,0 +1,37 @@
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+ARG AK
+ARG SK
+COPY nuget.config /src/nuget.config
+COPY script.sh /src/script.sh
+RUN chmod +x ./script.sh
+RUN ./script.sh "$AK" "$SK" "false"
+COPY ["src/App/SunnyRewards.Helios.ETL.App.csproj", "src/App/"]
+COPY ["src/Infrastructure/SunnyRewards.Helios.ETL.Infrastructure.csproj", "src/Infrastructure/"]
+COPY ["src/Core/SunnyRewards.Helios.ETL.Core.csproj", "src/Core/"]
+COPY ["src/Common/SunnyRewards.Helios.ETL.Common.csproj", "src/Common/"]
+RUN dotnet restore "src/App/SunnyRewards.Helios.ETL.App.csproj"
+COPY . .
+WORKDIR "/src/src/App"
+RUN dotnet build "SunnyRewards.Helios.ETL.App.csproj" -c Release 
+WORKDIR /src
+ARG AK
+ARG SK
+COPY nuget.config /src/nuget.config
+COPY script.sh /src/script.sh
+RUN chmod +x ./script.sh
+RUN ./script.sh "$AK" "$SK" "true" "src/Core"
+WORKDIR "/src/src/App"
+FROM build AS publish
+RUN dotnet publish "SunnyRewards.Helios.ETL.App.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENV ASPNETCORE_ENVIRONMENT {{RUNTIME_ENVIRONMENT}}
+CMD ["dotnet", "SunnyRewards.Helios.ETL.App.dll", "--tenantCode", "ten-ecada21e57154928a2bb959e8365b8b4", "--fisCreateCards"]

@@ -1,0 +1,136 @@
+name: UAT Batch Job Workflow
+on:
+  workflow_dispatch:
+  # merge_group:
+  # push:
+  #   branches:
+  #     - release/1.1.0
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      QARepo: "helios-qa-batch-job-repo"
+      UATRepo: "helios-uat-batch-job-repo"
+      ProdRepo: "helios-batch-job-repo"
+      IntegRepo: "helios-integ-batch-job-repo"
+
+    steps:
+
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_UAT }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: UAT, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{ secrets.HELIOS_QA_AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.HELIOS_QA_AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-2
+
+      # - name: Configure AWS CLI
+      #   run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      # - name: Login to Amazon ECR
+      #   id: login-qa-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+
+      # - name: Get AWS account ID
+      #   id: aws_account_id
+      #   run: |
+      #     aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+      #     echo "::set-output name=account_id::$aws_account_id"  
+            
+      # - name: Pull QA Docker image
+      #   env:
+      #     QA_ECR_REGISTRY: ${{ steps.login-qa-ecr.outputs.registry }}
+      #     IMAGE_TAG: ${{ vars.UAT_ETL_IMAGEID }}
+      #   run: |
+      #     docker pull $QA_ECR_REGISTRY/${{ env.QARepo }}:$IMAGE_TAG 
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-uat-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Get AWS account ID
+        id: aws_account_id
+        run: |
+          aws_account_id=$(aws sts get-caller-identity --query "Account" --output text)
+          echo "::set-output name=account_id::$aws_account_id"  
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          sed -i "s/{{RUNTIME_ENVIRONMENT}}/Uat/g" Dockerfile
+          docker build -t $ECR_REGISTRY/${{ env.UATRepo }} --build-arg AK="${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}" --build-arg SK="${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/${{ env.UATRepo }} 
+
+      # - name: Re-tag and Push Docker image to UAT Repo
+      #   env:
+      #     QA_ECR_REGISTRY: ${{ steps.login-qa-ecr.outputs.registry }}
+      #     UAT_ECR_REGISTRY: ${{ steps.login-uat-ecr.outputs.registry }}
+      #     IMAGE_TAG: ${{ vars.UAT_ETL_IMAGEID }}
+      #   run: |
+      #     docker tag $QA_ECR_REGISTRY/${{ env.QARepo }}:$IMAGE_TAG $UAT_ECR_REGISTRY/${{ env.UATRepo }}:latest
+      #     docker push $UAT_ECR_REGISTRY/${{ env.UATRepo }}:latest
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_UAT }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: UAT, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL

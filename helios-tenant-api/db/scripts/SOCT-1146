@@ -1,0 +1,87 @@
+-- Navitus
+
+DO $$
+DECLARE
+    v_tenant_code TEXT := '<Navitus-tenant-code>'; -- Replace with desired tenant_code
+BEGIN
+    UPDATE tenant.tenant
+    SET tenant_attr = jsonb_set(
+        tenant_attr,
+        '{ux,themeColors,RewardDialTextColor}',
+        '"#000000"',
+        true
+    )
+    WHERE tenant_code = v_tenant_code
+      AND tenant_attr #>> '{ux,themeColors,RewardDialTextColor}' IS NULL;
+END$$;
+
+
+-- Sunny
+
+DO $$
+DECLARE
+    v_tenant_code TEXT := '<Sunny-tenant-code>'; -- Replace with desired tenant_code
+BEGIN
+    UPDATE tenant.tenant
+    SET tenant_attr = jsonb_set(
+        tenant_attr,
+        '{ux,themeColors,RewardDialTextColor}',
+        '"#000000"',
+        true
+    )
+    WHERE tenant_code = v_tenant_code
+      AND tenant_attr #>> '{ux,themeColors,RewardDialTextColor}' IS NULL;
+END$$;
+
+
+-- KP
+
+DO $$
+DECLARE
+    v_tenant_code TEXT := '<KP-tenant-code>'; -- Replace with desired tenant_code
+BEGIN
+    UPDATE tenant.tenant
+    SET tenant_attr = jsonb_set(
+        tenant_attr,
+        '{ux,themeColors,RewardDialTextColor}',
+        '"#003b71"',
+        true
+    )
+    WHERE tenant_code = v_tenant_code
+      AND tenant_attr #>> '{ux,themeColors,RewardDialTextColor}' IS NULL;
+END$$;
+
+
+-- Watco
+
+DO $$
+DECLARE
+    v_tenant_code TEXT := '<Watco-tenant-code>'; -- Replace with desired tenant_code
+BEGIN
+    UPDATE tenant.tenant
+    SET tenant_attr = jsonb_set(
+        tenant_attr,
+        '{ux,themeColors,RewardDialTextColor}',
+        '"#000000"',
+        true
+    )
+    WHERE tenant_code = v_tenant_code
+      AND tenant_attr #>> '{ux,themeColors,RewardDialTextColor}' IS NULL;
+END$$;
+
+
+
+DO $$
+DECLARE
+    v_tenant_code TEXT := '<Watco-tenant-code>'; -- Replace with desired tenant_code
+BEGIN
+    UPDATE tenant.tenant
+    SET tenant_attr = jsonb_set(
+        tenant_attr,
+        '{ux,taskTileColors,activeTabBgColor}',
+        '"#1B416D"',
+        true
+    )
+    WHERE tenant_code = v_tenant_code
+      AND tenant_attr #>> '{ux,themeColors,RewardDialTextColor}' IS NULL;
+END$$;

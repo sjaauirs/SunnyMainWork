@@ -1,0 +1,132 @@
+﻿using SunnyRewards.Helios.ETL.Common.Mappings;
+using SunnyRewards.Helios.ETL.Core.Domain.Models;
+
+namespace SunnyRewards.Helios.ETL.Infrastructure.Mappings
+{
+    public class ETLMonetaryTransactionMap : BaseMapping<ETLMonetaryTransactionModel>
+    {
+        public ETLMonetaryTransactionMap()
+        {
+            Schema("fis");
+            Table("monetary_transaction");
+
+            Id(x => x.MonetaryTransactionId).Column("monetary_transaction_id");
+
+            Map(x => x.RecordType).Column("record_type").Not.Nullable();
+            Map(x => x.IssuerClientId).Column("issuer_client_id").Not.Nullable();
+            Map(x => x.ClientName).Column("client_name").Not.Nullable();
+            Map(x => x.SubProgramId).Column("sub_program_id").Not.Nullable();
+            Map(x => x.SubProgramName).Column("sub_program_name").Not.Nullable();
+            Map(x => x.Bin).Column("bin").Not.Nullable();
+            Map(x => x.BinCurrencyAlpha).Column("bin_currency_alpha").Not.Nullable();
+            Map(x => x.BinCurrencyCode).Column("bin_currency_code").Not.Nullable();
+            Map(x => x.BankName).Column("bank_name").Not.Nullable();
+            Map(x => x.Pan).Column("pan").Not.Nullable();
+            Map(x => x.CardNumber).Column("card_number").Not.Nullable();
+            Map(x => x.AuthorizationAmount).Column("authorization_amount").Not.Nullable();
+            Map(x => x.AuthorizationCode).Column("authorization_code").Not.Nullable();
+            Map(x => x.TxnLocalAmount).Column("txn_local_amount").Not.Nullable();
+            Map(x => x.TxnLocDateTime).Column("txn_loc_datetime").Not.Nullable();
+            Map(x => x.TxnSign).Column("txn_sign").Not.Nullable();
+            Map(x => x.TransactionCurrencyCode).Column("transaction_currency_code").Not.Nullable();
+            Map(x => x.TransactionCurrencyAlpha).Column("transaction_currency_alpha").Not.Nullable();
+            Map(x => x.TxnTypeCode).Column("txn_type_code").Not.Nullable();
+            Map(x => x.ReasonCode).Column("reason_code").Not.Nullable();
+            Map(x => x.DerivedRequestCode).Column("derived_request_code").Not.Nullable();
+            Map(x => x.ResponseCode).Column("response_code").Not.Nullable();
+            Map(x => x.MatchStatusCode).Column("match_status_code").Nullable();
+            Map(x => x.MatchTypeCode).Column("match_type_code").Nullable();
+            Map(x => x.InitialLoadDateFlag).Column("initial_load_date_flag").Not.Nullable();
+            Map(x => x.Mcc).Column("mcc").Nullable();
+            Map(x => x.MerchantCurrencyAlpha).Column("merchant_currency_alpha").Nullable();
+            Map(x => x.MerchantCurrencyCode).Column("merchant_currency_code").Nullable();
+            Map(x => x.MerchantName).Column("merchant_name").Not.Nullable();
+            Map(x => x.MerchantNumber).Column("merchant_number").Nullable();
+            Map(x => x.ReferenceNumber).Column("reference_number").Nullable();
+            Map(x => x.PaymentMethodId).Column("payment_method_id").Nullable();
+            Map(x => x.SettleAmount).Column("settle_amount").Not.Nullable();
+            Map(x => x.WcsUtcPostDate).Column("wcs_utc_post_date").Not.Nullable();
+            Map(x => x.SourceCode).Column("source_code").Not.Nullable();
+            Map(x => x.AcquirerReferenceNumber).Column("acquirer_reference_number").Nullable();
+            Map(x => x.AcquirerId).Column("acquirer_id").Nullable();
+            Map(x => x.AddressVerificationResponse).Column("address_verification_response").Nullable();
+            Map(x => x.AdjustAmount).Column("adjust_amount").Nullable();
+            Map(x => x.AuthorizationResponse).Column("authorization_response").Nullable();
+            Map(x => x.AvsInformation).Column("avs_information").Nullable();
+            Map(x => x.Denomination).Column("denomination").Nullable();
+            Map(x => x.DirectAccessNumber).Column("direct_access_number").Nullable();
+            Map(x => x.CardNumberProxy).Column("card_number_proxy").Nullable();
+            Map(x => x.FudgeAmt).Column("fudge_amt").Nullable();
+            Map(x => x.MatchStatusDescription).Column("match_status_description").Nullable();
+            Map(x => x.MatchTypeDescription).Column("match_type_description").Nullable();
+            Map(x => x.MccDescription).Column("mcc_description").Nullable();
+            Map(x => x.MerchantZip).Column("merchant_zip").Nullable();
+            Map(x => x.MerchantCity).Column("merchant_city").Nullable();
+            Map(x => x.MerchantCountryCode).Column("merchant_country_code").Nullable();
+            Map(x => x.MerchantCountryName).Column("merchant_country_name").Nullable();
+            Map(x => x.MerchantProvince).Column("merchant_province").Nullable();
+            Map(x => x.MerchantState).Column("merchant_state").Nullable();
+            Map(x => x.MerchantStreet).Column("merchant_street").Nullable();
+            Map(x => x.Pin).Column("pin").Nullable();
+            Map(x => x.PosData).Column("pos_data").Nullable();
+            Map(x => x.PosEntryCode).Column("pos_entry_code").Nullable();
+            Map(x => x.PosEntryDescription).Column("pos_entry_description").Nullable();
+            Map(x => x.PurseNo).Column("purse_no").Nullable();
+            Map(x => x.ReasonCodeDescription).Column("reason_code_description").Nullable();
+            Map(x => x.DerivedRequestCodeDescription).Column("derived_request_code_description").Nullable();
+            Map(x => x.ResponseDescription).Column("response_description").Nullable();
+            Map(x => x.RetrievalRefNo).Column("retrieval_ref_no").Nullable();
+            Map(x => x.Reversed).Column("reversed").Nullable();
+            Map(x => x.SourceDescription).Column("source_description").Nullable();
+            Map(x => x.TerminalNumber).Column("terminal_number").Nullable();
+            Map(x => x.TxnTypeName).Column("txn_type_name").Nullable();
+            Map(x => x.UserId).Column("user_id").Nullable();
+            Map(x => x.UserFirstName).Column("user_first_name").Nullable();
+            Map(x => x.UserLastName).Column("user_last_name").Nullable();
+            Map(x => x.WcsLocalPostDate).Column("wcs_local_post_date").Nullable();
+            Map(x => x.Comment).Column("comment").Nullable();
+            Map(x => x.ClientReferenceNumber).Column("client_reference_number").Nullable();
+            Map(x => x.ClientSpecificId).Column("client_specific_id").Nullable();
+            Map(x => x.ActualRequestCode).Column("actual_request_code").Nullable();
+            Map(x => x.ActualRequestCodeDescription).Column("actual_request_code_description").Nullable();
+            Map(x => x.CardholderClientUniqueId).Column("cardholder_client_unique_id").Nullable();
+            Map(x => x.PanProxyNumber).Column("pan_proxy_number").Nullable();
+            Map(x => x.TxnUid).Column("txn_uid").Nullable();
+            Map(x => x.PurseName).Column("purse_name").Nullable();
+            Map(x => x.PurseStatus).Column("purse_status").Nullable();
+            Map(x => x.PurseCreationDate).Column("purse_creation_date").Nullable();
+            Map(x => x.PurseEffectiveDate).Column("purse_effective_date").Nullable();
+            Map(x => x.PurseExpirationDate).Column("purse_expiration_date").Nullable();
+            Map(x => x.PurseStatusDate).Column("purse_status_date").Nullable();
+            Map(x => x.AssociationSource).Column("association_source").Nullable();
+            Map(x => x.ReasonId).Column("reason_id").Nullable();
+            Map(x => x.ReasonDescription).Column("reason_description").Nullable();
+            Map(x => x.Variance).Column("variance").Nullable();
+            Map(x => x.ProcessCode).Column("process_code").Nullable();
+            Map(x => x.TokenUniqueReferenceId).Column("token_unique_reference_id").Nullable();
+            Map(x => x.PanUniqueReferenceId).Column("pan_unique_reference_id").Nullable();
+            Map(x => x.TokenTransactionId).Column("token_transaction_id").Nullable();
+            Map(x => x.TokenStatus).Column("token_status").Nullable();
+            Map(x => x.TokenStatusDescription).Column("token_status_description").Nullable();
+            Map(x => x.NetworkReferenceId).Column("network_reference_id").Nullable();
+            Map(x => x.MultiClearingIndication).Column("multi_clearing_indication").Nullable();
+            Map(x => x.AuthorizationBalance).Column("authorization_balance").Nullable();
+            Map(x => x.SettleBalance).Column("settle_balance").Nullable();
+            Map(x => x.WcsLocalInserted).Column("wcs_local_inserted").Nullable();
+            Map(x => x.WcsUtcInserted).Column("wcs_utc_inserted").Nullable();
+            Map(x => x.WcsUtcUpdated).Column("wcs_utc_updated").Nullable();
+            Map(x => x.DiscountAmount).Column("discount_amount").Nullable();
+            Map(x => x.AchEffectiveDate).Column("ach_effective_date").Nullable();
+            Map(x => x.CardPresent).Column("card_present").Nullable();
+            Map(x => x.DeviceType).Column("device_type").Nullable();
+            Map(x => x.SpendCategory).Column("spend_category").Nullable();
+            Map(x => x.FilterType).Column("filter_type").Nullable();
+            Map(x => x.PaymentAccountReference).Column("payment_account_reference").Nullable();
+            Map(x => x.OriginalMerchantNumber).Column("original_merchant_number").Nullable();
+            Map(x => x.CreateTimestamp).Column("create_ts").Not.Nullable();
+            Map(x => x.DeleteNbr).Column("delete_nbr").Not.Nullable();
+            Map(x => x.BatchFileId).Column("batch_file_id").Not.Nullable();
+            Map(x => x.RecordNbr).Column("record_number").Not.Nullable();
+        }
+    }
+}

@@ -1,0 +1,90 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tenant-api
+  namespace: helios-dev
+  labels:
+    app: tenant-api
+spec:
+  selector:
+    app: tenant-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: tenant-api-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: tenant-api
+      
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenant-api-deployment
+  namespace: helios-dev
+  labels:
+    app: tenant-api
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: tenant-api
+  template:
+    metadata:
+      labels:
+        app: tenant-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: devsa
+      containers:
+      - name: tenant-api
+        image: 529088296813.dkr.ecr.us-east-2.amazonaws.com/helios-dev-tenant-api-ecr:IMAGETAG
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "2"
+          limits:
+            memory: "4Gi"
+            cpu: "4"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Newdev
+---        
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: tenant-api-dev-scaling-hpa
+  namespace: helios-dev   
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: tenant-api-deployment
+  minReplicas: 4
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50    
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50

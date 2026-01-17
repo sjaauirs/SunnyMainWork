@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+    	<PackageReference Include="Sunny.Benefits.Cms.Core" Version="2025.10.31.1208" />
+		<PackageReference Include="SunnyBenefits.Fis.Core" Version="2025.12.16.1701" />
+		<PackageReference Include="SunnyBenefits.Health.Core" Version="2025.3.27.1506" />
+		<PackageReference Include="SunnyRewards.Helios.Common.Core" Version="2025.9.14.1155" />
+		<PackageReference Include="SunnyRewards.Helios.Cohort.Core" Version="2025.8.13.1107" />	
+		<PackageReference Include="SunnyRewards.Helios.Task.Core" Version="2025.9.24.750" />	
+		<PackageReference Include="SunnyRewards.Helios.Sweepstakes.Core" Version="2025.11.23.1845" />
+		<PackageReference Include="SunnyRewards.Helios.Tenant.Core" Version="2025.10.6.1526" />
+		<PackageReference Include="SunnyRewards.Helios.User.Core" Version="2025.10.21.1858" />
+		<PackageReference Include="SunnyRewards.Helios.Wallet.Core" Version="2026.1.12.2150" />
+	</ItemGroup>
+
+	<Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+		<Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmm&quot;)) --no-build --configuration $(Configuration) --output &quot;nuget&quot;" />
+	</Target>
+
+</Project>

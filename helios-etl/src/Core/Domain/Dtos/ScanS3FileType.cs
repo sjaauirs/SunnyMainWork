@@ -1,0 +1,23 @@
+﻿namespace SunnyRewards.Helios.ETL.Core.Domain.Dtos
+{
+    public enum ScanS3FileType
+    {
+        MEMBER_IMPORT,
+        TASK_COMPLETE,
+        TASK_IMPORT,
+        QUESTIONNAIRE_IMPORT,
+        TASK_UPDATE,
+        TRIVIA_IMPORT,
+        FIS_CARD30_RESPONSE,
+        FIS_CARD60_RESPONSE,
+        FIS_NON_MONETARY_TXN,
+        FIS_MONETARY_TXN,
+        HSA_SWEEP,
+        MEMBER_TENANT_ENROLLMENT,
+        PROCESS_PLD,
+        CONSUMER_ATTRIBUTES,
+        SUBSCRIBER_ONLY_MEMBER_IMPORT,
+        COHORTCONSUMER,
+        PROCESS_DEPOSIT_INSTRUCTIONS_FILE
+    }
+}

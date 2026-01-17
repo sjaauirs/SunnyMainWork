@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="AWS.Logger.AspNetCore" Version="3.4.1" />
+
+	  <PackageReference Include="AWSSDK.SecurityToken" Version="3.7.300.53" />
+
+	  <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\SunnyRewards.Helios.Wallet.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\SunnyRewards.Helios.ETL.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.404" />
+    <PackageReference Include="CsvHelper" Version="31.0.0" />
+    <PackageReference Include="SunnyBenefits.Fis.Core" Version="2025.2.21.1229" />
+    <PackageReference Include="SunnyRewards.Helios.Cohort.Core" Version="2025.7.2.619" />
+    <PackageReference Include="SunnyRewards.Helios.Common.Core" Version="2025.9.14.1155" />
+    <PackageReference Include="SunnyRewards.Helios.NotificationService.Core" Version="2025.7.9.1333" />
+	  <PackageReference Include="SunnyRewards.Helios.Task.Core" Version="2025.9.25.1032">
+		  <Aliases>SunnyRewards_Task</Aliases>
+			  </PackageReference>
+	  <PackageReference Include="SunnyRewards.Helios.Tenant.Core" Version="2025.12.3.1140" />
+	  <PackageReference Include="SunnyRewards.Helios.User.Core" Version="2025.7.28.1638" />
+	  <PackageReference Include="SunnyRewards.Helios.Wallet.Core" Version="2025.12.2.955" />
+  </ItemGroup>
+  <Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+	  <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmm&quot;)) --no-build --configuration $(Configuration) --output &quot;nuget&quot;" />
+  </Target>
+</Project>

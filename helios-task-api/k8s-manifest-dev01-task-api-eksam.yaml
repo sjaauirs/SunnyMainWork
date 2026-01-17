@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: task-api-sa
+  namespace: helios-dev01
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::375611915274:role/helios-dev01-task-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: task-api
+  namespace: helios-dev01
+  labels:
+    app: task-api
+spec:
+  selector:
+    app: task-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-api-deployment
+  namespace: helios-dev01
+  labels:
+    app: task-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task-api
+  template:
+    metadata:
+      labels:
+        app: task-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: task-api-sa
+      containers:
+      - name: task-api
+        image: 375611915274.dkr.ecr.us-east-2.amazonaws.com/helios-dev01-task-api-ecr:IMAGETAG
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Dev01

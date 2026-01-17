@@ -1,0 +1,133 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: benefits-bff-api-sa
+  namespace: helios-dev01
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::375611915274:role/helios-dev01-benefits-bff-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: benefits-bff-api
+  namespace: helios-dev01
+spec:
+  selector:
+      app: benefits-bff-api
+
+  ports:
+    - name: https
+      port: 443
+      targetPort: 5001
+    - name: http
+      port: 80
+      targetPort: 5001
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benefits-bff-api-deployment
+  namespace: helios-dev01
+  labels:
+    app: benefits-bff-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: benefits-bff-api
+  template:
+    metadata:
+      labels:
+        app: benefits-bff-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: benefits-bff-api-sa
+      containers:
+      - name: benefits-bff-api
+        image: 375611915274.dkr.ecr.us-east-2.amazonaws.com/helios-dev01-benefits-bff-api-ecr:IMAGETAG
+        ports:
+          - name: http
+            containerPort: 5001
+            protocol: TCP
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Dev01
+          # - name: AdminConsumerCode
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: development
+          #       key: AdminConsumerCode
+          #       optional: false
+          # - name: env
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: development
+          #       key: env
+          #       optional: false
+          # - name: AUTH0_CLIENT_ID
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: development
+          #       key: AUTH0_CLIENT_ID
+          #       optional: false
+          # - name: AUTH0_CLIENT_SECRET
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: development
+          #       key: AUTH0_CLIENT_SECRET
+          #       optional: false  
+          # - name: JWT_SECRET_KEY
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name: development
+          #       key: JWT_SECRET_KEY
+          #       optional: false          
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80},{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/load-balancer-name: helios-dev01-benefits-bff-lb
+    alb.ingress.kubernetes.io/subnets: subnet-05cfbeb2546eb928f,subnet-0c290aad7e630637e,subnet-0da0b50f6bb727e82
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:375611915274:certificate/349f2376-1533-4aeb-b33f-5ce6e514eb4e
+    # Define the path and port for the health check
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: benefits-bff-api
+  name: benefits-bff-api-ingress
+  namespace: helios-dev01
+spec:
+  tls:
+    - hosts:
+        - benefits-api.dev01.sunnyrewards.com
+      secretName: sunnyrewardsstardevqacert
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: benefits-bff-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific

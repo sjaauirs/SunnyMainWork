@@ -1,0 +1,507 @@
+name: Deploy to EKS Fargate
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment (dev01, dev, qa, uat, integ, prod, newdev, sbx)'
+        required: true
+        type: string
+
+jobs:
+  deploy-dev01:
+    if: ${{ inputs.environment == 'dev01' }}
+    name: Deploy to dev01
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/helios-dev01-benefits-bff-api-ecr:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/helios-dev01-benefits-bff-api-ecr:$GITHUB_RUN_ID
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-dev01-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          aws eks update-kubeconfig --name helios-dev01-eks --region us-east-2
+          kubectl apply -f helios-dev01-manifest-benefits-bff-api-eksam.yaml    
+      
+  deploy-dev:
+    if: ${{ inputs.environment == 'dev' }}
+    name: Deploy to dev
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (Dev)
+        if: ${{ inputs.environment == 'dev' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/helios-dev-benefits-bff-api:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/helios-dev-benefits-bff-api:$GITHUB_RUN_ID
+          #sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-dev-manifest-benefits-bff-api.yaml
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-dev-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          aws eks update-kubeconfig --name helios-dev --region us-east-2
+          # kubectl apply -f benefits-bff-api-dev-external-secret.yaml
+          #kubectl apply -f helios-dev-manifest-benefits-bff-api.yaml
+          kubectl apply -f helios-dev-manifest-benefits-bff-api-eksam.yaml
+  deploy-qa:
+    if: ${{ inputs.environment == 'qa' }}
+    name: Deploy to QA
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_QA }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: QA, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_QA_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_QA_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1 
+          
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/benefits-bff-qa-api:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_QA_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_QA_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/benefits-bff-qa-api:$GITHUB_RUN_ID
+          # docker tag $ECR_REGISTRY/benefits-bff-qa-api:$GITHUB_RUN_ID bffqaimage:$GITHUB_RUN_ID
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-qa-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          aws eks update-kubeconfig --name helios-qa --region us-east-2
+          kubectl apply -f helios-qa-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_QA }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: QA, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+  deploy-uat:
+    if: ${{ inputs.environment == 'uat' }}
+    name: Deploy to UAT
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_UAT }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: UAT, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+    
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+        
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/helios-uat-benefits-bff-api:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_UAT_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_UAT_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/helios-uat-benefits-bff-api:$GITHUB_RUN_ID
+          #sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" k8s-helios-uat-benefits-bff-api.yaml
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-uat-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          # sed -i "s/IMAGETAG/${{ vars.UAT_BENEFITS_BFF_API_IMAGEID }}/g" k8s-helios-uat-benefits-bff-api.yaml
+          aws eks update-kubeconfig --name helios-uat --region us-east-2
+          #kubectl apply -f k8s-helios-uat-benefits-bff-api.yaml
+          kubectl apply -f helios-uat-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_UAT }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: UAT, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+  deploy-integ:
+    if: ${{ inputs.environment == 'integ' }}
+    name: Deploy to Integ
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_INTEG }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Integ, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+    
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_INT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+        
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/helios-integ-benefits-bff-api:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_INT_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_INT_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/helios-integ-benefits-bff-api:$GITHUB_RUN_ID
+          #sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" k8s-helios-integ-benefits-bff-api.yaml
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-integ-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          # sed -i "s/IMAGETAG/${{ vars.INTEG_BENEFITS_BFF_API_IMAGEID }}/g" k8s-helios-integ-benefits-bff-api.yaml
+          aws eks update-kubeconfig --name helios-integ --region us-east-2
+          #kubectl apply -f k8s-helios-integ-benefits-bff-api.yaml
+          kubectl apply -f helios-integ-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_INTEG }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Integ, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+          
+  deploy-prod:
+    if: ${{ inputs.environment == 'prod' }}
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Microsoft Teams message
+        id: teams_start
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_PROD }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Production, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action starting build/deploy",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+    
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_PROD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_PROD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+        
+      - name: 'Install dotnet' 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/benefits-bff-api:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_PROD_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_PROD_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/benefits-bff-api:$GITHUB_RUN_ID
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-prod-manifest-benefits-bff-api.yaml
+          #sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-prod-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          # sed -i "s/IMAGETAG/${{ vars.BENEFITS_BFF_API_IMAGEID }}/" helios-prod-manifest-benefits-bff-api.yaml
+          aws eks update-kubeconfig --name helios-prod --region us-east-2
+          kubectl apply -f helios-prod-manifest-benefits-bff-api.yaml
+          #kubectl apply -f helios-prod-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Send Microsoft Teams message
+        id: teams_end
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL_PROD }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "summary": "GitHub Action Notification",
+                "themeColor": "0078D7",
+                "sections": [
+                  {
+                    "activityTitle": "[Env: Production, Repo: ${{ github.event.repository.name }}]",
+                    "activitySubtitle": "GitHub Action build/deploy complete, result: ${{ job.status }}",
+                    "text": "[Link to PR or Commit](${{ github.event.pull_request.html_url || github.event.head_commit.url }})"
+                  }
+                ]
+              }' \
+          $TEAMS_WEBHOOK_URL
+  
+  deploy-newdev:
+    if: ${{ inputs.environment == 'newdev' }}
+    name: Deploy to New Dev
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_NEW_DEV_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_NEW_DEV_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1 
+          
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/helios-dev-benefits-bff-api-ecr:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_NEW_DEV_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_NEW_DEV_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/helios-dev-benefits-bff-api-ecr:$GITHUB_RUN_ID
+          #sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" k8s_newdev_manifest_benefits_bff_api.yaml
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" helios-perf-manifest-benefits-bff-api-eksam.yaml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          aws eks update-kubeconfig --name helios-dev-eks --region us-east-2
+          #kubectl apply -f k8s_newdev_manifest_benefits_bff_api.yaml
+          kubectl apply -f helios-perf-manifest-benefits-bff-api-eksam.yaml
+
+  deploy-sbx:
+    if: ${{ inputs.environment == 'sbx' }}
+    name: Deploy to SBX
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_SBX_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_SBX_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: 'Install dotnet'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install NuGet client
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build \
+            --build-arg AK=$AWS_ACCESS_KEY_ID \
+            --build-arg SK=$AWS_SECRET_ACCESS_KEY \
+            -t $ECR_REGISTRY/helios-sbx-benefits-bff-api-ecr:$GITHUB_RUN_ID .
+          docker push $ECR_REGISTRY/helios-sbx-benefits-bff-api-ecr:$GITHUB_RUN_ID
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" k8s-helios-sbx-benefits-bff-api.yaml
+
+      - name: Deploy to EKS
+        run: |
+          aws eks update-kubeconfig --name helios-sbx-eks --region us-east-2
+          kubectl apply -f k8s-helios-sbx-benefits-bff-api.yaml

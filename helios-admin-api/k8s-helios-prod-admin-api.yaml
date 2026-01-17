@@ -1,0 +1,146 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-api
+  namespace: helios-prod
+  labels:
+    app: admin-api
+spec:
+  selector:
+    app: admin-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-api-deployment
+  namespace: helios-prod
+  labels:
+    app: admin-api
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: admin-api
+  template:
+    metadata:
+      labels:
+        app: admin-api
+    spec:
+      serviceAccountName: heliossa
+      containers:
+      - name: admin-api
+        image: 759215193824.dkr.ecr.us-east-2.amazonaws.com/admin-api:IMAGETAG
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "4"
+          limits:
+            memory: "16Gi"
+            cpu: "8"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/subnets: 	subnet-03dd2339205efb753,subnet-059ad1c9a7b864902,subnet-0039dc1d4ebc8877a
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-2:759215193824:certificate/e8878c67-a3e1-432a-b6fb-97d6eabfb50a
+    alb.ingress.kubernetes.io/healthcheck-path: /health/live
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+  finalizers:
+  - ingress.k8s.aws/resources
+  labels:
+    app: admin-api
+  name: admin-api-ingress
+  namespace: helios-prod
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: admin-api
+            port:
+              number: 80
+        path: /*
+        pathType: ImplementationSpecific        
+---        
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: admin-api-prod-scaling-hpa
+  namespace: helios-prod   
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: admin-api-deployment
+  minReplicas: 4
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
+---            
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scale-job-admin-prod-service-account
+  namespace: helios-prod
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scale-job-admin-prod-role
+  namespace: helios-prod
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]  
+- apiGroups: ["apps"]
+  resources: ["deployments/scale"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+- apiGroups: ["batch"]
+  resources: ["cronjobs"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["create", "get", "update", "delete", "watch", "list", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scale-job-admin-prod-role-binding
+  namespace: helios-prod
+subjects:
+- kind: ServiceAccount
+  name: scale-job-admin-prod-service-account
+  namespace: helios-prod
+roleRef:
+  kind: Role
+  name: scale-job-admin-prod-role
+  apiGroup: rbac.authorization.k8s.io
+

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+		<Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmm&quot;)) --no-build --configuration $(Configuration) --output &quot;nuget&quot;" />
+	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="SunnyRewards.Helios.Common.Core" Version="2025.4.8.1038" />
+		<PackageReference Include="SunnyRewards.Helios.User.Core" Version="2025.4.7.1557" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,89 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallet-api
+  namespace: helios-dev
+  labels:
+    app: wallet-api
+spec:
+  selector:
+    app: wallet-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: wallet-api-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: wallet-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wallet-api-deployment
+  namespace: helios-dev
+  labels:
+    app: wallet-api
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: wallet-api
+  template:
+    metadata:
+      labels:
+        app: wallet-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: devsa
+      containers:
+      - name: wallet-api
+        image: 529088296813.dkr.ecr.us-east-2.amazonaws.com/helios-dev-wallet-api-ecr:IMAGETAG
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "4"
+          limits:
+            memory: "16Gi"
+            cpu: "8"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Newdev
+---        
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: wallet-api-dev-scaling-hpa
+  namespace: helios-dev   
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: wallet-api-deployment
+  minReplicas: 4
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50    
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50

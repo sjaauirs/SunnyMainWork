@@ -1,0 +1,46 @@
+name: Deploy to Dev EKS Fargate
+
+on:
+  workflow_dispatch:
+  merge_group:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Configure AWS CLI
+        run: aws configure set default.region us-east-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/helios-dev-admin-api:$GITHUB_RUN_ID --build-arg AK="${{secrets.HELIOS_DEV_AWS_ACCESS_KEY_ID}}" --build-arg SK="${{secrets.HELIOS_DEV_AWS_SECRET_ACCESS_KEY }}" .
+          docker push $ECR_REGISTRY/helios-dev-admin-api:$GITHUB_RUN_ID
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" k8s_manifest_dev_admin_api.yml
+          sed -i "s/IMAGETAG/$GITHUB_RUN_ID/g" k8s_manifest_dev_admin_api_eksam.yml
+
+      - name: Deploy to EKS Fargate
+        run: |
+          aws eks update-kubeconfig --name helios-dev --region us-east-2
+          #kubectl apply -f k8s_manifest_dev_admin_api.yml
+          kubectl apply -f k8s_manifest_dev_admin_api_eksam.yml

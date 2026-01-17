@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Domain\Dtos\AppMetadata.cs" />
+	  <Compile Remove="Domain\Dtos\Auth0UpdateDto.cs" />
+	</ItemGroup>
+  <ItemGroup>
+   <PackageReference Include="Sunny.Benefits.Cms.Core" Version="2025.10.31.1208" />
+	<PackageReference Include="SunnyBenefits.Fis.Core" Version="2026.1.15.1810" />
+	<PackageReference Include="SunnyRewards.Helios.Admin.Core" Version="2025.4.23.1029" />
+	<PackageReference Include="SunnyRewards.Helios.Cohort.Core" Version="2025.7.23.918" />
+    <PackageReference Include="SunnyRewards.Helios.Common.Core" Version="2025.9.14.1155" />
+    <PackageReference Include="SunnyRewards.Helios.Task.Core" Version="2025.6.16.1132" />
+    <PackageReference Include="SunnyRewards.Helios.Tenant.Core" Version="2025.10.30.227" />
+    <PackageReference Include="SunnyRewards.Helios.User.Core" Version="2025.10.30.1105" /> 
+    <PackageReference Include="SunnyRewards.Helios.Wallet.Core" Version="2025.12.8.618" />
+	<PackageReference Include="SunnyRewards.Helios.NotificationService.Core" Version="2025.4.4.1419" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\Models\" />
+  </ItemGroup>
+
+	<Target Name="NugetPackAutoVersioning" AfterTargets="Build">
+		<Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmm&quot;)) --no-build --configuration $(Configuration) --output &quot;nuget&quot;" />
+	</Target>
+</Project>

@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wallet-api-sa
+  namespace: helios-dev01
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::375611915274:role/helios-dev01-wallet-api-sa-role
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wallet-api
+  namespace: helios-dev01
+  labels:
+    app: wallet-api
+spec:
+  selector:
+    app: wallet-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wallet-api-deployment
+  namespace: helios-dev01
+  labels:
+    app: wallet-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wallet-api
+  template:
+    metadata:
+      labels:
+        app: wallet-api
+      annotations:
+        eks.amazonaws.com/compute-type: ec2
+    spec:
+      serviceAccountName: wallet-api-sa
+      containers:
+      - name: wallet-api
+        image: 375611915274.dkr.ecr.us-east-2.amazonaws.com/helios-dev01-wallet-api-ecr:IMAGETAG
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "0.5Gi"
+            cpu: "0.5"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Dev01

@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SunnyRewards.Helios.ETL.Core.Domain.Dtos.FIS
+{
+    public class ConsumerNonMonetoryDetailDto
+    {
+        public char RecordType { get; set; }
+        public long TopClientId { get; set; }
+        public string TopClientName { get; set; }
+        public long IssuerClientId { get; set; }
+        public string ClientName { get; set; }
+        public long ProgramId { get; set; }
+        public string ProgramName { get; set; }
+        public long SubProgramId { get; set; }
+        public string SubProgramName { get; set; }
+        public long BIN { get; set; }
+        public string BINCurrencyAlpha { get; set; }
+        public string BINCurrencyCode { get; set; }
+        public long PackageId { get; set; }
+        public string PackageName { get; set; }
+        public string PAN { get; set; }
+        public string CardNumber { get; set; }
+        public DateTime ActivateDate { get; set; }
+        public long CardStatus { get; set; }
+        public string CardholderFirstName { get; set; }
+        public string CardholderLastName { get; set; }
+        public char CardholderMiddleName { get; set; }
+        public string CardholderMailingAddressLine1 { get; set; }
+        public string CardholderMailingAddressLine2 { get; set; }
+        public string CardholderMailingCity { get; set; }
+        public string CardholderMailingState { get; set; }
+        public string CardholderMailingZip { get; set; }
+        public string CardholderMailingCountry { get; set; }
+        public long CardholderCountryCode { get; set; }
+        public string CardholderTelephoneNumber { get; set; }
+        public string CardholderTelephoneNumberExt { get; set; }
+        public DateTime CardNumberLocCreationDate { get; set; }
+        public DateTime CardNumberLocExpirationDate { get; set; }
+        public long MarketSegmentId { get; set; }
+        public string MarketSegmentDescription { get; set; }
+        public long RequestCode { get; set; }
+        public long SourceCode { get; set; }
+        public DateTime WCSUTCInserted { get; set; }
+
+        // optional fields
+        public long? CardholderBusinessNumber { get; set; }
+        public long? CardholderBusinessNumberExt { get; set; }
+        public DateTime? CardNumberLocStatusEffectiveDate { get; set; }
+        public string? CardholderCounty { get; set; }
+        public DateTime? CardholderDateOfBirth { get; set; }
+        public string? CardholderDriverLicenseNumber { get; set; }
+        public string? CardholderDriverLicenseState { get; set; }
+        public string? CardholderEmail { get; set; }
+        public long? CardholderEmergencyPhone { get; set; }
+        public long? CardholderEmergencyPhoneExtension { get; set; }
+        public long? CardholderFax { get; set; }
+        public long? CardholderFaxExtension { get; set; }
+        public string? CardholderSSN { get; set; }
+        public string? CardholderSuffix { get; set; }
+        public string? CardStatusDescription { get; set; }
+        public long? ClientLevelNumber { get; set; }
+        public DateTime? Account_LocCreationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public string CardNumberProxy { get; set; }
+        public string? MemoCommentsClientDefined { get; set; }
+        public string? PrivacyOptOut { get; set; }
+        public string? OtherPersonAddr1 { get; set; }
+        public string? OtherPersonAddr2 { get; set; }
+        public long? OtherPersonBusinessNumber { get; set; }
+        public long? OtherPersonBusinessNumberExt { get; set; }
+        public string? OtherPersonCity { get; set; }
+        public string? OtherPersonCountry { get; set; }
+        public long? OtherPersonCountryCode { get; set; }
+        public string? OtherPersonCounty { get; set; }
+        public DateTime? OtherPersonDOB { get; set; }
+        public string? OtherPersonDriverLicenseNumber { get; set; }
+        public string? OtherPersonDriverLicenseState { get; set; }
+        public string? OtherPersonEmail { get; set; }
+        public long? OtherPersonEmergencyPhone { get; set; }
+        public long? OtherPersonEmergencyPhoneExtension { get; set; }
+        public long? OtherPersonFax { get; set; }
+        public string? OtherPersonRelationship { get; set; }
+        public string? OtherPersonFirst { get; set; }
+        public string? OtherPersonLast { get; set; }
+        public string? OtherPersonMiddle { get; set; }
+        public string? OtherPersonState { get; set; }
+        public long? OtherPersonTelephoneNumber { get; set; }
+        public long? OtherPersonTelephoneNumberExtension { get; set; }
+        public string? OtherPersonZip { get; set; }
+        public string? PrimaryRelationship { get; set; }
+        public string? RequestCodeDescription { get; set; }
+        public string? SourceCodeDescription { get; set; }
+        public long? TrueAnonymous { get; set; }
+        public string? UserID { get; set; }
+        public string? UserFirstName { get; set; }
+        public string? UserLastName { get; set; }
+        public long? PersonID { get; set; }
+        public string? CardholderClientUniqueID { get; set; }
+        public string? CardholderOtherInfo { get; set; }
+        public string? ClientVal { get; set; }
+        public string? DiscretionaryData1 { get; set; }
+        public string? DiscretionaryData2 { get; set; }
+        public string? DiscretionaryData3 { get; set; }
+        public string? ClientSpecificID { get; set; }
+        public string? CardholderAlertsEmail { get; set; }
+        public string? DirectAccessNumber { get; set; }
+        public string? CardholderResidentialAddressLine1 { get; set; }
+        public string? CardholderResidentialAddressLine2 { get; set; }
+        public string? CardholderResidentialCity { get; set; }
+        public string? CardholderResidentialState { get; set; }
+        public string? CardholderResidentialZip { get; set; }
+        public string? CardholderResidentialCountry { get; set; }
+        public long? CardholderSMSMobileNumber { get; set; }
+        public long? CardholderMobileNumber { get; set; }
+        public string? PANProxyNumber { get; set; }
+        public string? CardholderMailingAddressLine3 { get; set; }
+        public string? CardholderResidentialAddressLine3 { get; set; }
+        public long? OrderID { get; set; }
+        public string? SMSLanguage { get; set; }
+        public string? EmailLanguage { get; set; }
+        public string? Title { get; set; }
+        public DateTime? InitialValueLoad { get; set; }
+        public DateTime? DatePersonCreated { get; set; }
+        public string? IDType { get; set; }
+        public string? IDNumber { get; set; }
+        public string? PassportCountryOfIssuance { get; set; }
+        public string? Name1 { get; set; }
+        public string? Value1 { get; set; }
+        public string? Name2 { get; set; }
+        public string? Value2 { get; set; }
+        public string? Name3 { get; set; }
+        public string? Value3 { get; set; }
+        public string? Name4 { get; set; }
+        public string? Value4 { get; set; }
+        public string? Name5 { get; set; }
+        public string? Value5 { get; set; }
+        public string? Name6 { get; set; }
+        public string? Value6 { get; set; }
+        public string? Name7 { get; set; }
+        public string? Value7 { get; set; }
+        public string? Name8 { get; set; }
+        public string? Value8 { get; set; }
+        public string? Name9 { get; set; }
+        public string? Value9 { get; set; }
+        public string? Name10 { get; set; }
+        public string? Value10 { get; set; }
+        public string? RiskWiseCodes { get; set; }
+        public string? RiskWiseResult { get; set; }
+        public string? IDVCodes { get; set; }
+        public string? IDVResult { get; set; }
+        public string? IDologyCodes { get; set; }
+        public string? IDologyResult { get; set; }
+        public string? CardholderFederalTaxID { get; set; }
+        public string? CardholderCompanyName { get; set; }
+        public string? CardholderIdentificationQuestions { get; set; }
+        public string? APSCodes { get; set; }
+        public string? APSResult { get; set; }
+        public long? ReasonID { get; set; }
+        public string? ReasonDescription { get; set; }
+    }
+
+}

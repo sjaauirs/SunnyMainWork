@@ -1,0 +1,37 @@
+{
+  "Logging": {
+    "Region": "us-east-2",
+    "LogGroup": "helios-newdev-etl",
+    "IncludeLogLevel": true,
+    "IncludeCategory": true,
+    "IncludeNewline": true,
+    "IncludeException": true,
+    "IncludeEventId": false,
+    "IncludeScopes": false,
+
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AWS": {
+    "AWS_BUCKET_NAME": "helios-newdev-customer-1",
+    "AWS_TMP_BUCKET_NAME": "sunny-tmp-newdev",
+    "AWS_SNS_TOPIC_NAME": "arn:aws:sns:us-east-2:590183943866:helios-newdev-etl-alerts",
+    "AWS_FIS_SFTP_BUCKET_NAME": "sunny-benefits-int-sftp-s3",
+    "AWS_SWEEPSTAKES_SFTP_BUCKET_NAME": "sunny-sweepstakes-sftp-newdev",
+    "AWS_SUNNY_FILE_ARCHIVE_BUCKET_NAME": "sunny-file-archive-newdev",
+    "AWS_REPORT_BUCKET_NAME": "helios-report-newdev",
+    "AWS_CARD_60_BATCH_JOB_DEFINITION_ARN": "arn:aws:batch:us-east-2:529088296813:job-definition/helios-dev-card-60-load-consumer-list-jobdef",
+    "AWS_BATCH_JOB_QUEUE_ARN": "arn:aws:batch:us-east-2:529088296813:job-queue/helios-dev-batch-job-queue",
+    "AWS_MEMBER_IMPORT_SNS_TOPIC_NAME": "arn:aws:sns:us-east-2:590183943866:sunny-helios-newdev-member-import-events.fifo",
+    "AWS_DEPOSIT_INSTRUCTION_JOB_DEFINITION_ARN": "arn:aws:batch:us-east-2:590183943866:job-definition/helios-dev-etl-enable-s3-process-deposit-instruction-file-jobdef"
+  },
+  "SSNStartFrom": 500000000,
+  "DatafeedApi": "http://datafeed-api.helios-dev.svc.cluster.local/api/v1/",
+  "AdminAPI": "http://admin-api.helios-dev.svc.cluster.local/api/v1/",
+  "HealthAPI": "http://health-api.helios-dev.svc.cluster.local/api/v1/",
+  "AdminPortalBatchJobReportUrl": "https://sunnyrewards.retool.com/app/admin-panel?_environment=newdev&view=job_report&reportCode={0}",
+  "RetailApi": "https://retail-api.helios-dev.svc.cluster.local/api/v1/",
+  "BenefitAPI": "http://benefits-bff-api.helios-dev.svc.cluster.local/api/v1/"
+}

@@ -1,0 +1,69 @@
+name: Enable Auto-merge after 2 approvals
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  enable-auto-merge:
+    # Skip drafts
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write         # needed to enable auto-merge
+      pull-requests: write    # needed to read/act on PRs
+    steps:
+      - name: Count unique APPROVED reviews
+        id: approvals
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+
+            // Get all reviews and count unique APPROVED reviewers
+            const reviews = await github.paginate(
+              github.rest.pulls.listReviews,
+              { owner, repo, pull_number: prNumber, per_page: 100 }
+            );
+
+            // Use latest state per user; APPROVED must be the latest for them to count.
+            const latestByUser = new Map();
+            for (const r of reviews) {
+              latestByUser.set(r.user.id, r);
+            }
+
+            let approvedCount = 0;
+            for (const [, r] of latestByUser) {
+              if (r.state === "APPROVED") approvedCount++;
+            }
+
+            core.info(`Approved count: ${approvedCount}`);
+            core.setOutput("count", approvedCount.toString());
+
+      - name: Generate GitHub App Token
+        if: ${{ steps.approvals.outputs.count >= 2 }}
+        id: app_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Checkout repository
+        if: ${{ steps.approvals.outputs.count >= 2 }}
+        uses: actions/checkout@v4
+
+      - name: Enable auto-merge (squash) when threshold met
+        if: ${{ steps.approvals.outputs.count >= 2 }}
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # If auto-merge is already enabled, this is a no-op.
+          # Choose your strategy: --squash | --merge | --rebase
+          # gh pr merge "$PR_NUMBER" --auto --merge --delete-branch
+          gh pr merge "$PR_NUMBER" --auto --merge
